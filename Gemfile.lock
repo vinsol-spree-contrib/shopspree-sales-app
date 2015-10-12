@@ -147,6 +147,10 @@ GEM
       json
     awesome_nested_set (3.0.2)
       activerecord (>= 4.0.0, < 5)
+    aws-sdk (1.27.0)
+      json (~> 1.4)
+      nokogiri (>= 1.4.4)
+      uuidtools (~> 2.1)
     bcrypt (3.1.10)
     better_errors (2.0.0)
       coderay (>= 1.0.0)
@@ -408,6 +412,7 @@ GEM
       execjs (>= 0.3.0)
       json (>= 1.8.0)
     uniform_notifier (1.9.0)
+    uuidtools (2.1.5)
     versioncake (2.3.1)
       actionpack (>= 3.2)
       activesupport (>= 3.2)
@@ -425,6 +430,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  aws-sdk (< 2.0)
   better_errors (~> 2.0.0)
   binding_of_caller (~> 0.7.2)
   bullet (~> 4.14.7)

@@ -16,3 +16,21 @@ Spree.config do |config|
 end
 
 Spree.user_class = "Spree::LegacyUser"
+
+attachment_config = {
+  s3_credentials: {
+    access_key_id: ENV['AWS_ACCESS_KEY'],
+    secret_access_key: ENV['AWS_SECRET_TOKEN'],
+    bucket: ENV['AWS_BUCKET']
+  },
+
+  storage:        :s3,
+  s3_protocol:    "https",
+  path:           "/spree/products/:id/:style/:basename.:extension",
+}
+
+Paperclip::Attachment.default_options[:s3_protocol] = "https"
+
+attachment_config.each do |key, value|
+  Spree::Image.attachment_definitions[:attachment][key.to_sym] = value
+end
