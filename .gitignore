@@ -36,14 +36,18 @@ build/
 
 
 /.bundle
+/coverage
 .ruby-version
 /public/system
 .rspec
 *.gem
 *.rbc
 /.config
+/InstalledFiles
 /pkg/
 /spec/reports/
+/test/tmp/
+/test/version_tmp/
 /.yardoc/
 /_yardoc/
 /doc/
@@ -58,12 +62,16 @@ build/
 *.DS_Store
 .sass-cache
 .rspec
+.rvmrc
 /test
 /coverage
-/config/database.yml
+/config/*.yml
+/config/*.sphinx.conf
 *.log
+/log/*.sphinx.pid
 /tmp/*
 /coverage
 /public/test_files
 /public/system/*
 /public/*.json
+/db/sphinx/*
