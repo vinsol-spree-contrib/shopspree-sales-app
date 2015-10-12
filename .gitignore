@@ -65,7 +65,8 @@ build/
 .rvmrc
 /test
 /coverage
-/config/*.yml
+/config/database.yml
+/config/spree.yml
 /config/*.sphinx.conf
 *.log
 /log/*.sphinx.pid
