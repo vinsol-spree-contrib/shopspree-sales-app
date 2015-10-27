@@ -33,5 +33,5 @@ Paperclip::Attachment.default_options[:s3_protocol] = "https"
 
 attachment_config.each do |key, value|
   Spree::Image.attachment_definitions[:attachment][key.to_sym] = value
-  Spree::Category.attachment_definitions[:icon][key.to_sym] = value
+  Spree::Taxon.attachment_definitions[:icon][key.to_sym] = value
 end
