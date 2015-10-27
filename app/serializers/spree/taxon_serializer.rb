@@ -6,12 +6,12 @@ module Spree
                :permalink,
                :parent_id,
                :taxonomy_id,
-               :icon_path
+               :icon_url
 
     has_many :children
 
-    def icon_path
-      object.icon.path(:original)
+    def icon_url
+      object.icon.url(:original)
     end
   end
 end
