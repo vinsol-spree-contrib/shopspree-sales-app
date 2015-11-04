@@ -1,0 +1,32 @@
+<% content_for :page_actions do %>
+  <%= button_link_to(Spree.t(:new_banner), spree.new_admin_banner_path, { class: "btn-success", icon: 'add', id: 'new_banner_link' }) if can? :create, Spree::Image %>
+<% end %>
+
+<table class="table sortable" data-hook="banners_table">
+  <thead>
+    <tr data-hook="images_header">
+      <th colspan="2">
+        <%= Spree.t(:thumbnail) %>
+      </th>
+      <th>
+        <%= Spree.t(:target_url) %>
+      </th>
+      <th class="actions"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @banners.each do |banner| %>
+      <tr id="<%= spree_dom_id banner %>" data-hook="banners_row">
+        <td class="image">
+          <%= image_tag(banner.image.url(:thumb_100_100)) %>
+        </td>
+        <td><%= link_to truncate(banner.target_url, length: 20), banner.target_url %></td>
+        <td class="actions actions-2 text-right">
+          <%= link_to_with_icon('edit', Spree.t(:edit), spree.edit_admin_banner_path(banner), class: 'btn btn-primary btn-sm', no_text: true, data: { action: 'edit' }) if can? :edit, banner %>
+          <%= link_to_delete(banner, { url: spree.admin_banner_path(banner), no_text: true }) if can? :destroy, banner %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

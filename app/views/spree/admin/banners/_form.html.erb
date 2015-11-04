@@ -1,0 +1,14 @@
+<div data-hook="admin_image_form_fields" class="row">
+  <div class="col-md-6">
+    <div data-hook="file" class="form-group">
+      <%= f.label :image, Spree.t(:filename) %>
+      <%= f.file_field :image %>
+    </div>
+  </div>
+  <div data-hook="alt_text" class="col-md-6">
+    <div class="form-group">
+      <%= f.label :target_url, Spree.t(:target_url) %>
+      <%= f.text_field :target_url, rows: 4, class: 'form-control' %>
+    </div>
+  </div>
+</div>

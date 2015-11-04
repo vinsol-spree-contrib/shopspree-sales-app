@@ -8,6 +8,10 @@ Rails.application.routes.draw do
         resource :home, controller: :home, only: :show
       end
     end
+
+    namespace :admin do
+      resources :banners
+    end
   end
 
 end
