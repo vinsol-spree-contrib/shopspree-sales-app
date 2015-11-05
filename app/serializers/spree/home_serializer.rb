@@ -3,6 +3,7 @@ module Spree
     attributes :hot_products,
                :recommended_products
 
-    has_many :banners
+    has_many :promo_offers, serializer: Spree::BannerSerializer
+    has_many :brand_offers, serializer: Spree::BannerSerializer
   end
 end
