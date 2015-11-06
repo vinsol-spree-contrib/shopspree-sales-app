@@ -1,14 +1,22 @@
 <div data-hook="admin_image_form_fields" class="row">
   <div class="col-md-6">
     <div data-hook="file" class="form-group">
-      <%= f.label :image, Spree.t(:filename) %>
+      <%= f.label :image, Spree.t(:filename) %>*
       <%= f.file_field :image %>
     </div>
   </div>
   <div data-hook="alt_text" class="col-md-6">
     <div class="form-group">
       <%= f.label :target_url, Spree.t(:target_url) %>
-      <%= f.text_field :target_url, rows: 4, class: 'form-control' %>
+      <%= f.text_field :target_url, class: 'form-control' %>
+    </div>
+  </div>
+  <div data-hook="type" class="col-md-12">
+    <div class="form-group">
+      <%= f.label :type, Spree.t(:type) %>*<br />
+      <%= f.collection_radio_buttons :type, Spree::Banner::TYPES, :to_s, :demodulize do |radio_button_builder| %>
+        <%= radio_button_builder.label { radio_button_builder.radio_button.html_safe + ' ' + radio_button_builder.text.underscore.humanize } %>
+      <% end %>
     </div>
   </div>
 </div>

@@ -1,6 +1,11 @@
 module Spree
   class Banner < ActiveRecord::Base
+    TYPES = ['Spree::PromoOffer', 'Spree::BrandOffer']
+
     has_attached_file :image, styles: { thumb_960_540: '960x540>', thumb_100_100: '100x100>' }
+
+    validates :type, presence: true
+    validates :type, inclusion: { in: TYPES }, allow_blank: true
 
     validates :target_url, url: true, allow_blank: true
     validates_attachment :image, presence: true,
