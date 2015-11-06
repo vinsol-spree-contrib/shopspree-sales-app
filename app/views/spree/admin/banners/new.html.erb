@@ -4,7 +4,7 @@
   <%= Spree.t(:new_banner) %>
 <% end %>
 
-<%= form_for [:admin, @banner], html: { multipart: true } do |f| %>
+<%= form_for [:admin, @banner.becomes(Spree::Banner)], html: { multipart: true } do |f| %>
   <fieldset data-hook="new_image">
     <%= render partial: 'form', locals: { f: f } %>
 

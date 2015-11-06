@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151105081930) do
+ActiveRecord::Schema.define(version: 20151106101132) do
 
   create_table "friendly_id_slugs", force: :cascade do |t|
     t.string   "slug",           limit: 255, null: false
@@ -101,6 +101,8 @@ ActiveRecord::Schema.define(version: 20151105081930) do
     t.datetime "image_updated_at"
     t.string   "type",               limit: 255
   end
+
+  add_index "spree_banners", ["type"], name: "index_spree_banners_on_type", using: :btree
 
   create_table "spree_calculators", force: :cascade do |t|
     t.string   "type",            limit: 255
