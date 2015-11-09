@@ -25,8 +25,7 @@ attachment_config = {
   },
 
   storage:        :s3,
-  s3_protocol:    "https",
-  path:           "/spree/products/:id/:style/:basename.:extension",
+  s3_protocol:    "https"
 }
 
 if Rails.env.production? || Rails.env.staging?
@@ -37,8 +36,9 @@ if Rails.env.production? || Rails.env.staging?
     Spree::Taxon.attachment_definitions[:icon][key.to_sym] = value
     Spree::Banner.attachment_definitions[:image][key.to_sym] = value
   end
-
-  Spree::Image.attachment_definitions[:attachment][:path] = '/spree/products/:id/:style/:basename.:extension'
-  Spree::Taxon.attachment_definitions[:icon][:path] = '/spree/products/:id/:style/:basename.:extension'
-  Spree::Banner.attachment_definitions[:image][:path] = '/spree/banners/:id/:style/:basename.:extension'
 end
+
+
+Spree::Image.attachment_definitions[:attachment][:path] = '/spree/products/:id/:style/:basename.:extension'
+Spree::Taxon.attachment_definitions[:icon][:path] = '/spree/products/:id/:style/:basename.:extension'
+Spree::Banner.attachment_definitions[:image][:path] = '/spree/banners/:id/:style/:basename.:extension'
