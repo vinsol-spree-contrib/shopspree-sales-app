@@ -29,14 +29,16 @@ attachment_config = {
   path:           "/spree/products/:id/:style/:basename.:extension",
 }
 
-Paperclip::Attachment.default_options[:s3_protocol] = "https"
+if Rails.env.production? || Rails.env.staging?
+  Paperclip::Attachment.default_options[:s3_protocol] = "https"
 
-attachment_config.each do |key, value|
-  Spree::Image.attachment_definitions[:attachment][key.to_sym] = value
-  Spree::Taxon.attachment_definitions[:icon][key.to_sym] = value
-  Spree::Banner.attachment_definitions[:image][key.to_sym] = value
+  attachment_config.each do |key, value|
+    Spree::Image.attachment_definitions[:attachment][key.to_sym] = value
+    Spree::Taxon.attachment_definitions[:icon][key.to_sym] = value
+    Spree::Banner.attachment_definitions[:image][key.to_sym] = value
+  end
+
+  Spree::Image.attachment_definitions[:attachment][:path] = '/spree/products/:id/:style/:basename.:extension'
+  Spree::Taxon.attachment_definitions[:icon][:path] = '/spree/products/:id/:style/:basename.:extension'
+  Spree::Banner.attachment_definitions[:image][:path] = '/spree/banners/:id/:style/:basename.:extension'
 end
-
-Spree::Image.attachment_definitions[:attachment][:path] = '/spree/products/:id/:style/:basename.:extension'
-Spree::Taxon.attachment_definitions[:icon][:path] = '/spree/products/:id/:style/:basename.:extension'
-Spree::Banner.attachment_definitions[:image][:path] = '/spree/banners/:id/:style/:basename.:extension'
