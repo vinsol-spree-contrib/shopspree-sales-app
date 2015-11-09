@@ -408,6 +408,8 @@ ActiveRecord::Schema.define(version: 20151109101109) do
     t.datetime "updated_at",             null: false
   end
 
+  add_index "spree_product_property_types", ["name"], name: "index_spree_product_property_types_on_name", unique: true, using: :btree
+
   create_table "spree_products", force: :cascade do |t|
     t.string   "name",                 limit: 255,   default: "",    null: false
     t.text     "description",          limit: 65535
