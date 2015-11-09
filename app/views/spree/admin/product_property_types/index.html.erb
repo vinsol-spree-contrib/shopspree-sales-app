@@ -1,0 +1,28 @@
+<% content_for :page_actions do %>
+  <%= button_link_to(Spree.t(:new_product_property_type), spree.new_admin_product_property_type_path, { class: "btn-success", icon: 'add', id: 'new_product_property_type_link' }) if can? :create, Spree::ProductPropertyType %>
+<% end %>
+
+<table class="table sortable" data-hook="banners_table">
+  <thead>
+    <tr data-hook="images_header">
+      <th colspan="2">
+        <%= Spree.t(:name) %>
+      </th>
+      <th class="actions"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @product_property_types.each do |product_property_type| %>
+      <tr id="<%= spree_dom_id product_property_type %>" data-hook="banners_row">
+        <td class="image">
+          <%= product_property_type.name %>
+        </td>
+        <td class="actions actions-2 text-right">
+          <%= link_to_with_icon('edit', Spree.t(:edit), spree.edit_admin_product_property_type_path(product_property_type), class: 'btn btn-primary btn-sm', no_text: true, data: { action: 'edit' }) if can? :edit, product_property_type %>
+          <%= link_to_delete(product_property_type, { url: spree.admin_product_property_type_path(product_property_type), no_text: true }) if can? :destroy, product_property_type %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
