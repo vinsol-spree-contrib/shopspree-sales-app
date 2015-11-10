@@ -1,6 +1,6 @@
 module Spree
   class Banner < ActiveRecord::Base
-    TYPES = ['Spree::PromoOffer', 'Spree::BrandOffer']
+    TYPES = ['Spree::PromoOfferBanner', 'Spree::BrandOfferBanner', 'Spree::CategoryOfferBanner', 'Spree::NewArrivalBanner']
 
     has_attached_file :image, styles: { thumb_960_540: '960x540>', thumb_100_100: '100x100>' }
 
