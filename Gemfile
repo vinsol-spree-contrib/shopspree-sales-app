@@ -9,7 +9,11 @@ gem 'spree',                                  github: 'spree/spree',            
 gem 'spree_gateway',                          github: 'spree/spree_gateway',         branch: '3-0-stable'
 gem 'spree_auth_devise',                      github: 'spree/spree_auth_devise',     branch: '3-0-stable'
 gem 'spree_ams',                              github: 'hhff/spree_ams',              branch: '3-0-alpha'
+gem 'spree_sale_prices',                      github: 'renuo/spree-sale-prices',     branch: '3-0-stable'
 gem 'aws-sdk',                                '< 2.0'
+
+## spree_sale_prices has dependency on slim-rails.
+gem 'slim-rails'
 
 group :assets do
   gem 'therubyracer',                         '~> 0.12.1', platforms: :ruby
