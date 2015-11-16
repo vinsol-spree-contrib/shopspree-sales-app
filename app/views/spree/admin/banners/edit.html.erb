@@ -1,6 +1,6 @@
 <%= render partial: 'spree/admin/shared/error_messages', locals: { target: @image } %>
 
-<%= form_for [:admin, @banner.becomes(Spree::Banner)], html: { multipart: true } do |f| %>
+<%= form_for [:admin, @banner], html: { multipart: true } do |f| %>
   <div data-hook="edit_image" class="panel panel-default">
     <div class="panel-heading">
       <h1 class="panel-title">
