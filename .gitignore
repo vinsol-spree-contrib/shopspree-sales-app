@@ -76,3 +76,4 @@ build/
 /public/system/*
 /public/*.json
 /db/sphinx/*
+/db/schema.rb
