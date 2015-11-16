@@ -10,7 +10,7 @@ module Spree
     end
 
     def type
-      object.type.demodulize
+      object.type.demodulize.underscore
     end
   end
 end
