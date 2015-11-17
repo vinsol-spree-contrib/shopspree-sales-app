@@ -13,10 +13,8 @@
   </div>
   <div data-hook="type" class="col-md-12">
     <div class="form-group">
-      <%= f.label :type, Spree.t(:type) %>*<br />
-      <%= f.collection_radio_buttons :type, Spree::Banner::TYPES, :to_s, :demodulize do |radio_button_builder| %>
-        <%= radio_button_builder.label { radio_button_builder.radio_button.html_safe + ' ' + radio_button_builder.text.underscore.humanize } %>
-      <% end %>
+      <%= f.label :type_id, Spree.t(:type_id) %>*<br />
+      <%= f.collection_radio_buttons :type_id, Spree::BannerType.all, :id, :presentation %>
     </div>
   </div>
 </div>

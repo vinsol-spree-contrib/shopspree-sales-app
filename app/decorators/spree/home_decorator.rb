@@ -2,8 +2,8 @@ module Spree
   class HomeDecorator
     include ActiveModel::Serialization
 
-    def banners
-      Spree::Banner.all
+    def banner_types
+      Spree::BannerType.includes(:banners).all
     end
 
   end
