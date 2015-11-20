@@ -2,7 +2,11 @@ module Spree
   class OptionValueFilter < Spree::Filter
 
     def values
-      product_list.option_values.pluck(:presentation)
+      option_values.pluck(:presentation)
+    end
+
+    def option_values
+      Spree::OptionValue.joins(variants: :product).merge(product_scope).includes(:option_type).uniq
     end
 
     def search_key

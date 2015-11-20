@@ -2,7 +2,11 @@ module Spree
   class PropertyFilter < Spree::Filter
 
     def values
-      product_list.product_properties.pluck(:value)
+      product_properties.pluck(:value)
+    end
+
+    def product_properties
+      Spree::ProductProperty.joins(:product).merge(product_scope).includes(:property).uniq
     end
 
     def search_key

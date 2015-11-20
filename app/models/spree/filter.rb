@@ -2,7 +2,7 @@ module Spree
   class Filter < ActiveRecord::Base
     self.inheritance_column = :name
 
-    cattr_accessor :product_list
+    cattr_accessor :product_scope
 
     TYPES = ['Range', 'Multiple', 'Single']
     NAMES = ['Spree::TaxonomyFilter', 'Spree::PropertyFilter', 'Spree::OptionValueFilter', 'Spree::PriceFilter']
@@ -11,8 +11,8 @@ module Spree
     validates :name, inclusion: { in: NAMES }
     validates :type, inclusion: { in: TYPES }
 
-    def self.get(product_list)
-      self.product_list = product_list
+    def self.get(product_scope)
+      self.product_scope = product_scope
       self.all
     end
 
