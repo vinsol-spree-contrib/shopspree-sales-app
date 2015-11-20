@@ -1,0 +1,28 @@
+<%= render partial: 'spree/admin/shared/error_messages', locals: { target: @image } %>
+
+<%= form_for [:admin, @filter.becomes(Spree::Filter)] do |f| %>
+  <div data-hook="edit_image" class="panel panel-default">
+    <div class="panel-heading">
+      <h1 class="panel-title">
+        <%= @filter.name %>
+      </h1>
+    </div>
+    <div class="panel-body">
+      <div class="form-group">
+        <div class="col-md-9">
+          <%= render partial: 'form', locals: { f: f } %>
+          <div class="form-group">
+            <%= f.label :enabled, Spree.t(:enabled) %>
+            <%= f.check_box :enabled, class: 'form-control' %>
+          </div>
+        </div>
+
+        <div class="form-actions" data-hook="buttons">
+          <%= button Spree.t('actions.update'), 'save' %>
+          <span class="or"><%= Spree.t(:or) %></span>
+          <%= button_link_to Spree.t('actions.cancel'), spree.admin_filters_path, id: 'cancel_link', icon: 'delete' %>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>

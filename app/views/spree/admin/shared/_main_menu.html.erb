@@ -34,6 +34,12 @@
   </ul>
 <% end %>
 
+<% if can?(:admin, Spree::Filter) %>
+  <ul class="nav nav-sidebar">
+    <%= tab 'Filters', url: spree.admin_filters_path, icon: 'file' %>
+  </ul>
+<% end %>
+
 <% if can? :admin, current_store %>
   <ul class="nav nav-sidebar">
     <%= main_menu_tree Spree.t(:configurations), icon: "wrench", sub_menu: "configuration", url: "#sidebar-configuration" %>

@@ -12,6 +12,7 @@ Rails.application.routes.draw do
     namespace :admin do
       resources :banners
       resources :product_property_types
+      resources :filters
     end
   end
 

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151109101109) do
+ActiveRecord::Schema.define(version: 20151118105131) do
 
   create_table "friendly_id_slugs", force: :cascade do |t|
     t.string   "slug",           limit: 255, null: false
@@ -154,6 +154,17 @@ ActiveRecord::Schema.define(version: 20151109101109) do
     t.datetime "created_at",                    null: false
     t.datetime "updated_at",                    null: false
   end
+
+  create_table "spree_filters", force: :cascade do |t|
+    t.string   "name",         limit: 255
+    t.string   "display_name", limit: 255
+    t.string   "type",         limit: 255
+    t.boolean  "enabled",                  default: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "spree_filters", ["type", "name"], name: "index_spree_filters_on_type_and_name", using: :btree
 
   create_table "spree_gateways", force: :cascade do |t|
     t.string   "type",        limit: 255

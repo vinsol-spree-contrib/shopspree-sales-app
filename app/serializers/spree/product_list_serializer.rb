@@ -1,10 +1,11 @@
 module Spree
   class ProductListSerializer < ActiveModel::Serializer
-    attributes :maximum_price, :product_properties, :option_values
+    attributes :maximum_price, :product_properties, :option_values, :minimum_price
 
     has_many :categories, serializer: Spree::ProductList::TaxonSerializer
     has_many :brands, serializer: Spree::ProductList::TaxonSerializer
     has_many :products, serializer: Spree::ProductList::ProductSerializer
+    has_many :filters, serializer: Spree::ProductList::FilterSerializer
 
     def product_properties
       object.product_properties.inject(Hash.new { |h, k| h[k] = [] }) do |product_properties_hash, product_property|

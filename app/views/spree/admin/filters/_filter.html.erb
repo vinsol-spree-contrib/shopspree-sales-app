@@ -1,0 +1,15 @@
+<tr id="<%= spree_dom_id filter %>" data-hook="banners_row">
+  <td colspan="2">
+    <%= filter.name %>
+  </td>
+  <td colspan="2">
+    <%= filter.display_name %>
+  </td>
+  <td colspan="2">
+    <%= filter.type %>
+  </td>
+  <td class="actions actions-2 text-right">
+    <%= link_to_with_icon('edit', Spree.t(:edit), spree.edit_admin_filter_path(filter), class: 'btn btn-primary btn-sm', no_text: true, data: { action: 'edit' }) if can? :edit, filter %>
+    <%= link_to_delete(filter, { url: spree.admin_filter_path(filter), no_text: true }) if can? :destroy, filter %>
+  </td>
+</tr>
