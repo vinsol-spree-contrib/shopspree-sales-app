@@ -10,7 +10,7 @@ module Spree
     attr_reader :products, :product_scope
 
     def filters
-      Spree::Filter.get(self.product_scope)
+      Spree::Filter.get(product_scope)
     end
 
   end
