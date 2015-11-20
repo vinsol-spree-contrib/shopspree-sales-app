@@ -8,3 +8,5 @@ module Spree
     end
   end
 end
+
+ActiveModel::Serializer.root = false
