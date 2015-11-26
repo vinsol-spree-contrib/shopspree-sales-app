@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151123091816) do
+ActiveRecord::Schema.define(version: 20151126064118) do
 
   create_table "friendly_id_slugs", force: :cascade do |t|
     t.string   "slug",           limit: 255, null: false
@@ -90,6 +90,13 @@ ActiveRecord::Schema.define(version: 20151123091816) do
 
   add_index "spree_assets", ["viewable_id"], name: "index_assets_on_viewable_id", using: :btree
   add_index "spree_assets", ["viewable_type", "type"], name: "index_assets_on_viewable_type_and_type", using: :btree
+
+  create_table "spree_banner_types", force: :cascade do |t|
+    t.string   "name",         limit: 255
+    t.string   "presentation", limit: 255
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
+  end
 
   create_table "spree_banners", force: :cascade do |t|
     t.string   "target_url",         limit: 255
@@ -419,7 +426,7 @@ ActiveRecord::Schema.define(version: 20151123091816) do
   add_index "spree_product_property_types", ["name"], name: "index_spree_product_property_types_on_name", unique: true, using: :btree
 
   create_table "spree_products", force: :cascade do |t|
-    t.string   "name",                 limit: 255,   default: "",    null: false
+    t.string   "name",                 limit: 255,   default: "",   null: false
     t.text     "description",          limit: 65535
     t.datetime "available_on"
     t.datetime "deleted_at"
@@ -428,12 +435,10 @@ ActiveRecord::Schema.define(version: 20151123091816) do
     t.string   "meta_keywords",        limit: 255
     t.integer  "tax_category_id",      limit: 4
     t.integer  "shipping_category_id", limit: 4
-    t.datetime "created_at",                                         null: false
-    t.datetime "updated_at",                                         null: false
+    t.datetime "created_at",                                        null: false
+    t.datetime "updated_at",                                        null: false
     t.boolean  "promotionable",                      default: true
     t.string   "meta_title",           limit: 255
-    t.boolean  "is_hot",                             default: false
-    t.boolean  "is_recommended",                     default: false
   end
 
   add_index "spree_products", ["available_on"], name: "index_spree_products_on_available_on", using: :btree
@@ -975,6 +980,10 @@ ActiveRecord::Schema.define(version: 20151123091816) do
     t.string   "confirmation_token",     limit: 255
     t.datetime "confirmed_at"
     t.datetime "confirmation_sent_at"
+    t.string   "profile_pic_url",        limit: 255
+    t.string   "uid",                    limit: 255
+    t.string   "login_type",             limit: 255
+    t.string   "full_name",              limit: 255
   end
 
   add_index "spree_users", ["deleted_at"], name: "index_spree_users_on_deleted_at", using: :btree

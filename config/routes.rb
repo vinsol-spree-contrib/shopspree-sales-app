@@ -6,6 +6,7 @@ Rails.application.routes.draw do
     namespace :api do
       namespace :ams do
         resource :home, controller: :home, only: :show
+        post '/users/sign_in', to: 'users#token'
       end
     end
 
