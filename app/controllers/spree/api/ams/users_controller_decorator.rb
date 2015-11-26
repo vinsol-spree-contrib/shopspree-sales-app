@@ -21,7 +21,7 @@ Spree::Api::Ams::UsersController.class_eval do
     authorize! :create, Spree.user_class
     @user = Spree.user_class.new(user_params)
     if @user.save
-      render json: @user, serializer: Spree::UserSerializer
+      render_with_serializer
     else
       invalid_resource!(@user)
     end

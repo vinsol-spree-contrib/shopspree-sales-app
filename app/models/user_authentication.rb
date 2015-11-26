@@ -2,11 +2,9 @@ module Spree
   class UserAuthentication < ActiveRecord::Base
 
     SOCIAL_LOGIN_PROVIDERS = ['Facebook', 'Google']
-    LOGIN_PROVIDERS = ['ShopSpree'].concat(SOCIAL_LOGIN_PROVIDERS)
 
-    validates :uid, presence: true, if: :social_login_provider?
-    validates :provider, inclusion: { in: LOGIN_PROVIDERS, message: 'Provider must be Facebook/Google/ShopSpree' }
-    validates :uid, uniqueness: { scope: :provider, message: 'Email already exits' }
+    validates :uid, presence: true
+    validates :provider, inclusion: { in: SOCIAL_LOGIN_PROVIDERS, message: 'Provider must be Facebook or Google' }
 
     belongs_to :user, class_name: 'Spree::User'
 

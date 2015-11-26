@@ -10,21 +10,24 @@ Spree::User.class_eval do
   before_save :set_confirmed_at, if: :social_authentication?
   after_create :generate_spree_api_key!
 
-  scope :find_for_social_authentication, 
-        ->(uid: uid, provider: provider) { joins(:authentication).where(spree_user_authentications: { uid: uid, provider: provider } ).first }
+  validate :user_email, on: :create
 
   accepts_nested_attributes_for :authentication, allow_destroy: true
+
+  def self.find_for_social_authentication(uid: uid, provider: provider)
+    joins(:authentication).where(spree_user_authentications: { uid: uid, provider: provider } ).first
+  end
 
   def confirmed?
     confirmed_at.present?
   end
 
   def social_authentication?
-    authentication.present? && authentication.social_login_provider?
+    try(:authentication).try(:present?) && trye(:authentication).try(:social_login_provider?)
   end
 
   def password_required?
-    if authentication.present?
+    if try(:authentication).try(:present?)
       false
     else
       super
@@ -44,6 +47,12 @@ Spree::User.class_eval do
   end
 
   private
+
+  def user_email
+    if Spree::User.where(email: self.email).joins(:authentication).where(spree_user_authentications: {provider: provider}).exists?
+      errors.add(:email, 'Email already exists')
+    end
+  end
 
     def set_confirmed_at
       self.confirmed_at = Time.current
