@@ -23,7 +23,7 @@ Spree::User.class_eval do
   end
 
   def social_authentication?
-    try(:authentication).try(:present?) && trye(:authentication).try(:social_login_provider?)
+    try(:authentication).try(:present?) && try(:authentication).try(:social_login_provider?)
   end
 
   def password_required?
