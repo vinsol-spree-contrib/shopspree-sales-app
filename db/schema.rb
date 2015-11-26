@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151126064118) do
+ActiveRecord::Schema.define(version: 20151126121259) do
 
   create_table "friendly_id_slugs", force: :cascade do |t|
     t.string   "slug",           limit: 255, null: false
@@ -950,6 +950,15 @@ ActiveRecord::Schema.define(version: 20151126064118) do
 
   add_index "spree_trackers", ["active"], name: "index_spree_trackers_on_active", using: :btree
 
+  create_table "spree_user_authentications", force: :cascade do |t|
+    t.string  "uid",             limit: 255
+    t.string  "provider",        limit: 255
+    t.integer "user_id",         limit: 4
+    t.string  "profile_pic_url", limit: 255
+  end
+
+  add_index "spree_user_authentications", ["provider", "user_id"], name: "index_spree_user_authentications_on_provider_and_user_id", using: :btree
+
   create_table "spree_users", force: :cascade do |t|
     t.string   "encrypted_password",     limit: 128
     t.string   "password_salt",          limit: 128
@@ -980,14 +989,11 @@ ActiveRecord::Schema.define(version: 20151126064118) do
     t.string   "confirmation_token",     limit: 255
     t.datetime "confirmed_at"
     t.datetime "confirmation_sent_at"
-    t.string   "profile_pic_url",        limit: 255
-    t.string   "uid",                    limit: 255
-    t.string   "login_type",             limit: 255
     t.string   "full_name",              limit: 255
   end
 
   add_index "spree_users", ["deleted_at"], name: "index_spree_users_on_deleted_at", using: :btree
-  add_index "spree_users", ["email"], name: "email_idx_unique", unique: true, using: :btree
+  add_index "spree_users", ["email"], name: "index_spree_users_on_email", using: :btree
   add_index "spree_users", ["spree_api_key"], name: "index_spree_users_on_spree_api_key", using: :btree
 
   create_table "spree_variants", force: :cascade do |t|
