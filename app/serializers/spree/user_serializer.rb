@@ -5,8 +5,8 @@ module Spree
                :email,
                :full_name,
                :spree_api_key,
-               :profile_pic_url,
-               :confirmed
+               :confirmed,
+               :authentications
 
     def confirmed
       object.confirmed?
