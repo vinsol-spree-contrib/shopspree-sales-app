@@ -42,3 +42,4 @@ end
 Spree::Image.attachment_definitions[:attachment][:path] = '/spree/products/:id/:style/:basename.:extension'
 Spree::Taxon.attachment_definitions[:icon][:path] = '/spree/products/:id/:style/:basename.:extension'
 Spree::Banner.attachment_definitions[:image][:path] = '/spree/banners/:id/:style/:basename.:extension'
+Spree::Auth::Config[:confirmable] = true

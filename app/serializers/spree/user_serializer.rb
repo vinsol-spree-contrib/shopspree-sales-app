@@ -6,6 +6,7 @@ module Spree
                :full_name,
                :spree_api_key,
                :confirmed,
+               :phone,
                :authentications
 
     def confirmed
