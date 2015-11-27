@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151126121259) do
+ActiveRecord::Schema.define(version: 20151127060250) do
 
   create_table "friendly_id_slugs", force: :cascade do |t|
     t.string   "slug",           limit: 255, null: false
@@ -106,7 +106,10 @@ ActiveRecord::Schema.define(version: 20151126121259) do
     t.string   "image_content_type", limit: 255
     t.integer  "image_file_size",    limit: 4
     t.datetime "image_updated_at"
+    t.integer  "type_id",            limit: 4
   end
+
+  add_index "spree_banners", ["type_id"], name: "index_spree_banners_on_type_id", using: :btree
 
   create_table "spree_calculators", force: :cascade do |t|
     t.string   "type",            limit: 255
@@ -990,6 +993,7 @@ ActiveRecord::Schema.define(version: 20151126121259) do
     t.datetime "confirmed_at"
     t.datetime "confirmation_sent_at"
     t.string   "full_name",              limit: 255
+    t.string   "phone",                  limit: 255
   end
 
   add_index "spree_users", ["deleted_at"], name: "index_spree_users_on_deleted_at", using: :btree
