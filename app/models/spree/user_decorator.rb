@@ -18,11 +18,7 @@ Spree::User.class_eval do
   end
 
   def social_authentication?
-    authentications.exists?
-  end
-
-  def profile_pic_url
-    
+    authentications.any?
   end
 
   def password_required?
