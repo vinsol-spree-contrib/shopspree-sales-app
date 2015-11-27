@@ -2,11 +2,7 @@ Spree::Api::Ams::UsersController.class_eval do
 
   def token
     if @user = Spree.user_class.find_for_database_authentication(login: user_params[:email])
-      if user_params[:password].present?
-        authenticate_with_password
-      elsif user_params[:authentication_attributes][:uid].present?
-        authenticate_with_uid
-      end
+      authenticate_api_user
     else
       render json: {
         error: "Invalid resource. Please fix errors and try again.",
@@ -19,8 +15,8 @@ Spree::Api::Ams::UsersController.class_eval do
 
   def create
     authorize! :create, Spree.user_class
-    @user = Spree.user_class.new(user_params)
-    if @user.save
+    set_api_user
+    if @user.update_attributes(user_params)
       render_with_serializer
     else
       invalid_resource!(@user)
@@ -30,17 +26,31 @@ Spree::Api::Ams::UsersController.class_eval do
   private
 
     def user_params
-      params.require(:user).permit(:email, :password, :full_name, 
-                                   authentication_attributes: [:provider, :uid, :profile_pic_url])
+      params.require(:user).permit(:email, :password, :full_name, :phone, authentications_attributes: [:uid, :provider, :profile_pic_url])
     end
 
     def render_with_serializer
       render json: @user, serializer: Spree::UserSerializer
     end
 
+    def set_api_user
+      if user_params[:authentications_attributes].present?
+        @user = Spree.user_class.find_or_initialize_by(email: user_params[:email])
+      else
+        @user = Spree.user_class.new
+      end
+    end
+
+    def authenticate_api_user
+      if user_params[:password].present?
+        authenticate_with_password
+      elsif params[:user][:uid].present?
+        authenticate_with_uid
+      end
+    end
+
     def authenticate_with_uid
-      if @user = Spree.user_class.find_for_social_authentication(uid: user_params[:authentication_attributes][:uid],
-                                                                 provider: user_params[:authentication_attributes][:provider])
+      if @user.valid_social_login?(params[:user][:uid], params[:user][:provider])
         render_with_serializer
       else
         render json: {
