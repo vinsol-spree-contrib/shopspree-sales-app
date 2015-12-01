@@ -2,7 +2,7 @@ Spree::User.class_eval do
 
   validates :full_name, presence: true
 
-  has_many :authentications, class_name: 'Spree::UserAuthentication'
+  has_many :authentications, class_name: 'Spree::UserAuthentication', dependent: :destroy
 
   before_save :set_confirmed_at, if: :social_authentication?
   after_create :generate_spree_api_key!
