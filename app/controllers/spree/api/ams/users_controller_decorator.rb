@@ -46,6 +46,10 @@ Spree::Api::Ams::UsersController.class_eval do
         authenticate_with_password
       elsif params[:user][:uid].present?
         authenticate_with_uid
+      else
+        render json: {
+          errors: 'Invalid params'
+        }, status: 422
       end
     end
 
