@@ -4,7 +4,7 @@ Spree::User.class_eval do
 
   has_many :authentications, class_name: 'Spree::UserAuthentication'
 
-  before_save :set_confirmed_at, if: :authentication_exists?
+  before_save :set_confirmed_at, if: :authentication_exists?, unless: :confirmed_at?
   after_create :generate_spree_api_key!
 
   accepts_nested_attributes_for :authentications, allow_destroy: true
@@ -32,7 +32,7 @@ Spree::User.class_eval do
   private
 
     def set_confirmed_at
-      self.confirmed_at = Time.current unless self.confirmed_at?
+      self.confirmed_at = Time.current
     end
 
 end
