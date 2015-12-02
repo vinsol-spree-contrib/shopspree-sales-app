@@ -7,7 +7,7 @@ class CreateSpreeUserAuthentications < ActiveRecord::Migration
       t.string :profile_pic_url
     end
 
-    add_index :spree_user_authentications, [:uid, :provider]
+    add_index :spree_user_authentications, [:user_id, :uid, :provider]
     add_index :spree_user_authentications, :uid
     add_index :spree_user_authentications, :user_id
   end
