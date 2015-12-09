@@ -58,7 +58,7 @@ module Spree
             end
 
             def address_params
-              params.permit(:street, :city, :state_code, :country, :zip_code, :phone_number)
+              params.permit(:address1, :city, :state_id, :country_id, :zip_code, :phone)
             end
 
         end
