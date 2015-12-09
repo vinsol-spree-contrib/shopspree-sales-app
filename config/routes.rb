@@ -7,6 +7,7 @@ Rails.application.routes.draw do
       namespace :ams do
         resource :home, controller: :home, only: :show
         resources :user_passwords, only: [:update, :create]
+        resources :states, only: :index
         namespace :user do
           resources :profiles, only: :update, param: :token
           resources :confirmations, only: :create
