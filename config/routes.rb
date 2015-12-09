@@ -10,6 +10,7 @@ Rails.application.routes.draw do
         namespace :user do
           resources :profiles, only: :update, param: :token
           resources :confirmations, only: :create
+          resources :addresses, only: [:index, :create, :update, :destroy]
         end
 
         post '/users/sign_in', to: 'users#token'
