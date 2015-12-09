@@ -7,25 +7,40 @@ module Spree
           include Requestable
 
           before_action :load_ams_user, only: [:index, :create, :update, :destroy]
+          before_action :load_address, only: [:update, :destroy]
 
           def index
-            authorize! :index, @user
+            authorize! :index, @user.shipping_address
+            authorize! :index, @user.billing_address
             render json: [@user.shipping_address, @user.billing_address], each_serializer: Spree::AddressSerializer, root: false
           end
 
           def create
-            authorize! :create, @user
-            if @user.update_attributes(user_params)
-              render_with_serializer
+            authorize! :create, Address
+            address = Address.new(address_params)
+            if address.save
+              render json: address, serializer: Spree::AddressSerializer
             else
-              invalid_resource!(@user)
+              invalid_resource!(address)
             end
           end
 
           def update
+            authorize! :update, @address
+            if @address.update(address_params)
+              render json: @address, serializer: Spree::AddressSerializer
+            else
+              invalid_resource!(@address)
+            end
           end
 
           def destroy
+            authroize! :destroy, @address
+            if @address.destroy
+              render json: { message: 'Successfully destroyed address ' }
+            else
+              render json: { error: 'Unable to destroy address ' }, status: 422
+            end
           end
 
           private
@@ -34,6 +49,16 @@ module Spree
               unless @user = Spree.user_class.find_by(spree_api_key: params[:token])
                 render json: { errors: 'User not found' }, status: 404
               end
+            end
+
+            def load_address
+              unless @address = Spree::Address.find_by(id: params[:address_id])
+                render json: { errors: 'Address not found' }, status: 404
+              end
+            end
+
+            def address_params
+              params.permit(:street, :city, :state_code, :country, :zip_code, :phone_number)
             end
 
         end
