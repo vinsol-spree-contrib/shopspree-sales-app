@@ -10,8 +10,6 @@ module Spree
           before_action :load_address, only: [:update, :destroy]
 
           def index
-            authorize! :index, @user.shipping_address
-            authorize! :index, @user.billing_address
             render json: [@user.shipping_address, @user.billing_address], each_serializer: Spree::AddressSerializer, root: false
           end
 
@@ -35,7 +33,7 @@ module Spree
           end
 
           def destroy
-            authroize! :destroy, @address
+            authorize! :destroy, @address
             if @address.destroy
               render json: { message: 'Successfully destroyed address ' }
             else
@@ -58,7 +56,7 @@ module Spree
             end
 
             def address_params
-              params.permit(:address1, :city, :state_id, :country_id, :zip_code, :phone)
+              params.require(:address).permit(:address1, :city, :state_id, :country_id, :zipcode, :phone).merge(user_id: @user.id)
             end
 
         end

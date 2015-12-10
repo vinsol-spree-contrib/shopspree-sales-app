@@ -1,5 +1,5 @@
 module Spree
   class StateSerializer < ActiveModel::Serializer
-    attributes :name, :abbr
+    attributes :id, :name, :abbr
   end
 end
