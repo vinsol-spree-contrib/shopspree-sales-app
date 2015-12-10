@@ -40,11 +40,9 @@ module Spree
     end
 
     def prices
-      prices = {}
-      prices[:maximum], prices[:minimum] = Spree::Price.where(currency: Spree::Config[:currency]).joins(variant: :product)
-                                                       .merge(product_scope).pluck("MAX(spree_prices.amount)", "MIN(spree_prices.amount)")
+      Spree::Price.where(currency: Spree::Config[:currency]).joins(variant: :product)
+                                                       .merge(product_scope).pluck("MIN(spree_prices.amount)", "MAX(spree_prices.amount)")
                                                        .flatten
-      prices
     end
   end
 end
