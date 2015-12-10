@@ -18,16 +18,12 @@ module Spree
         # => New stripe customer is created on every request
         def create
           authorize! :create, Spree::CreditCard
-          options = {
-            email: @user.email,
-            login: payment_gateway.preferences[:secret_key]
-          }
-          response = payment_gateway.provider.store(params[:stripe_token], options)
-          if response.success?
-            @credit_card = Spree::CreditCard.create_from_stripe_response!(response.params, @payment_method, @user)
+          @credit_card = @user.credit_cards.build(credit_card_params)
+          @credit_card.payment_method = payment_gateway
+          if @credit_card.save
             render json: @credit_card, serializer: Spree::CreditCardSerializer
           else
-            render json: { errors: response.message }, status: 422
+            render json: { errors: @credit_card.errors.full_messages.join(', ') }, status: 422
           end
         end
 
@@ -35,13 +31,10 @@ module Spree
         def destroy
           authorize! :destroy, @credit_card
 
-          # Deleting the whole customer as we are storing one card per customer on stripe.
-          # To delete only a card, pass a second arg as a hash => { card_id: card_id: @credit_card.gateway_payment_profile_id }
-          response = payment_gateway.provider.unstore(@credit_card.gateway_customer_profile_id)
-          if response.success? && @credit_card.destroy
+          if @credit_card.destroy
             render json: { message: 'Card destroyed' }, status: 200
           else
-            logger.tagged('DELETE Credit Card') { logger.info(response.message + ". Credit Card Id: #{ @credit_card.id }") }
+            logger.tagged('DELETE Credit Card') { logger.info(@credit_card.errors.full_messages.join(', ') + ". Credit Card Id: #{ @credit_card.id }") }
             render json: { errors: "Unable to destroy the card" }, status: 422
           end
         end
@@ -55,8 +48,12 @@ module Spree
 
         private
 
+          def credit_card_params
+            params.require(:credit_card).permit(permitted_credit_card_attributes)
+          end
+
           def check_presence_of_stripe_token
-            unless params[:stripe_token].present?
+            unless params[:credit_card][:gateway_payment_profile_id].present?
               render json: { errors: "stripe token is required" }, status: 422
             end
           end
@@ -68,7 +65,7 @@ module Spree
           def load_credit_card
             @credit_card = Spree::CreditCard.find_by(id: params[:id])
             unless @credit_card
-              render json: { errors: "Can't find credit card with id: #{params[:id]}" }, status: 422
+              render json: { errors: "Can't find credit card with id: #{ params[:id] }" }, status: 422
             end
           end
       end
