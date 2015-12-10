@@ -10,12 +10,12 @@ module Spree
           before_action :load_address, only: [:update, :destroy]
 
           def index
-            render json: [@user.shipping_address, @user.billing_address], each_serializer: Spree::AddressSerializer, root: false
+            render json: @user.addresses, each_serializer: Spree::AddressSerializer, root: false
           end
 
           def create
             authorize! :create, Address
-            address = Address.new(address_params)
+            address = @user.addresses.build(address_params)
             if address.save
               render json: address, serializer: Spree::AddressSerializer
             else
@@ -50,13 +50,13 @@ module Spree
             end
 
             def load_address
-              unless @address = Spree::Address.find_by(id: params[:address_id])
+              unless @address = @user.addresses.find_by(id: params[:address_id])
                 render json: { errors: 'Address not found' }, status: 404
               end
             end
 
             def address_params
-              params.require(:address).permit(:address1, :city, :state_id, :country_id, :zipcode, :phone).merge(user_id: @user.id)
+              params.require(:address).permit(:address1, :city, :state_id, :country_id, :zipcode, :phone)
             end
 
         end

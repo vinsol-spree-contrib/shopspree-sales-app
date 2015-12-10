@@ -4,7 +4,7 @@ module Spree
     def initialize(user)
       can :create, Address
       can :manage, Address do |address|
-        (user.shipping_address && user.shipping_address == address) || (user.billing_address && user.billing_address == address)
+        user.addresses.include?(address)
       end
     end
   end
