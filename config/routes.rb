@@ -14,6 +14,10 @@ Rails.application.routes.draw do
           resources :addresses, only: [:index, :create, :update, :destroy], param: :address_id
         end
 
+        scope '/users' do
+          resources :credit_cards, only: [:index, :create, :destroy]
+        end
+
         post '/users/sign_in', to: 'users#token'
         patch '/password/change', to: 'user_passwords#update'
         post '/password/reset', to: 'user_passwords#create'

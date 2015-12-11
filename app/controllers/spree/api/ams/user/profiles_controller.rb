@@ -19,12 +19,6 @@ module Spree
 
           private
 
-            def load_ams_user
-              unless @user = Spree.user_class.find_by(spree_api_key: params[:token])
-                render json: { errors: 'User not found' }, status: 404
-              end
-            end
-
             def user_update_params
               params.require(:user).permit(:full_name, :phone)
             end

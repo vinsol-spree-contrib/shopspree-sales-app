@@ -1,7 +1,5 @@
 Spree::User.class_eval do
 
-  validates :full_name, presence: true
-
   has_many :authentications, class_name: 'Spree::UserAuthentication', dependent: :destroy
 
   before_save :set_confirmed_at, if: :social_authentication?
