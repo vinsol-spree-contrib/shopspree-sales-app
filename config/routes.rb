@@ -20,9 +20,13 @@ Rails.application.routes.draw do
           resources :credit_cards, only: [:index, :create, :destroy]
         end
 
-        resources :orders do
+        concern :order_routes do
           resources :line_items
+          resources :payments, only: [:new, :create, :index]
         end
+
+        resources :orders, concerns: :order_routes
+        resources :checkouts, only: [:update], concerns: :order_routes
 
         post '/users/sign_in', to: 'users#token'
         patch '/password/change', to: 'user_passwords#update'
