@@ -11,7 +11,7 @@ gem 'spree_auth_devise',                      github: 'spree/spree_auth_devise',
 gem 'spree_mail_settings',                    github: 'spree-contrib/spree_mail_settings',  branch: '3-0-stable'
 gem 'spree_ams',                              github: 'hhff/spree_ams',                     branch: '3-0-alpha'
 gem 'spree_reviews',                          github: 'spree-contrib/spree_reviews',        branch: '3-0-stable'
-
+gem "spree_address_book",                     github: 'romul/spree_address_book',           branch: '3-0-stable'
 gem 'aws-sdk',                                '< 2.0'
 
 group :assets do

@@ -1,4 +1,14 @@
 Spree::Api::Ams::ProductsController.class_eval do
+  def show
+    @product = Spree::Product.find_by(id: params[:id])
+    if @product 
+      @product.review_limit = params[:review_limit]
+      render json: @product, serializer: Spree::ProductSerializer
+    else
+      render json: { errors: 'Product not found' }, status: 404
+    end
+  end
+
   def index
     if params[:ids]
       @product_scope = product_scope.where(id: params[:ids].split(",").flatten)

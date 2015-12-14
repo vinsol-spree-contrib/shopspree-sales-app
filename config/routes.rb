@@ -8,11 +8,17 @@ Rails.application.routes.draw do
         resource :home, controller: :home, only: :show
         resources :user_passwords, only: [:update, :create]
         resources :states, only: :index
-        resources :reviews, only: [:index, :create, :destroy]
+        namespace :product do
+          resources :reviews, only: [:index, :create, :destroy], param: :review_id
+        end
         namespace :user do
           resources :profiles, only: :update, param: :token
           resources :confirmations, only: :create
           resources :addresses, only: [:index, :create, :update, :destroy], param: :address_id
+        end
+
+        scope '/users' do
+          resources :credit_cards, only: [:index, :create, :destroy]
         end
 
         post '/users/sign_in', to: 'users#token'
