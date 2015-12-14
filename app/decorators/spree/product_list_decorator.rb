@@ -2,7 +2,7 @@ module Spree
   class ProductListDecorator
     include ActiveModel::Serialization
 
-    FILTER_TYPES = Hash.new('Multi-Select').merge({ 'Categories' =>  'Single-Select', 'Price' => 'Range', 'Category' => 'Single-Select' })
+    FILTER_TYPES ||= Hash.new('Multi-Select').merge({ 'Categories' =>  'Single-Select', 'Price' => 'Range', 'Category' => 'Single-Select' })
 
     def initialize(products, product_scope)
       @products       = products
