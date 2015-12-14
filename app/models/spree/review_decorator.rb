@@ -7,7 +7,7 @@ module Spree
 
   validates :name, :review, presence: true, if: :name_or_review_present?
 
-  scope :reviewed_ratings, -> { where.not(name: '') }
+  scope :ratings_with_reviews, -> { where.not(name: '') }
   scope :approved, -> { where(approved: true) }
   scope :most_recent, ->(count) { order(created_at: :desc).limit(count) }
 
