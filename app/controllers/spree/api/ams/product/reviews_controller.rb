@@ -9,11 +9,7 @@ module Spree
           before_action :load_review, only: :destroy
 
           def index
-            review_limit = params[:review_limit].to_i || 20
-            review_offset = (params[:page_number].to_i - 1).try(:*, review_limit) || 0
-            review_offset = @product.reviews_count - review_limit if review_offset > @product.reviews_count 
-            review_offset = @product.reviews_count if review_offset < 0
-            @reviews = @product.reviews.approved.most_recent(review_limit).offset(review_offset)
+            @reviews = @product.reviews.approved.paginate(per_page: params[:per_page], page: params[:page])
             render json: @reviews, each_serializer: Spree::ReviewSerializer, meta: { avg_rating: @product.avg_rating, reviews_count: @product.reviews_count }
           end
 
