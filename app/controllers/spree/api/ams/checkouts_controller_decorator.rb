@@ -12,6 +12,7 @@ Spree::Api::Ams::CheckoutsController.class_eval do
   private
 
   def raise_insufficient_quantity
+    @order.restart_checkout_flow
     @order.errors[:base] = "Insufficient stock for some line item."
     respond_with(@order, status: 422)
   end
