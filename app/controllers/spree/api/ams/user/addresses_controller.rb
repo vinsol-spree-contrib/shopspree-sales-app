@@ -43,12 +43,6 @@ module Spree
 
           private
 
-            def load_ams_user
-              unless @user = Spree.user_class.find_by(spree_api_key: params[:token])
-                render json: { errors: 'User not found' }, status: 404
-              end
-            end
-
             def load_address
               unless @address = @user.addresses.find_by(id: params[:address_id])
                 render json: { errors: 'Address not found' }, status: 404
