@@ -9,7 +9,7 @@ module Spree
           before_action :load_review, only: :destroy
 
           def index
-            @reviews = @product.reviews.approved.paginate(per_page: params[:per_page], page: params[:page])
+            @reviews = @product.reviews.approved.page(params[:page] || 1).per(params[:per_page] || 20)
             render json: @reviews, each_serializer: Spree::ReviewSerializer, meta: { avg_rating: @product.avg_rating, reviews_count: @product.reviews_count }
           end
 

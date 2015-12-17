@@ -1,8 +1,6 @@
 module Spree
   Review.class_eval do
 
-  self.per_page = 20
-
   validators.each do |a|
     a.attributes.reject! {|field| field.to_s =~ /name|review/ } if a.kind == :presence
   end
