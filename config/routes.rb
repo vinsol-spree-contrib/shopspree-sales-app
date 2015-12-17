@@ -14,9 +14,19 @@ Rails.application.routes.draw do
           resources :addresses, only: [:index, :create, :update, :destroy], param: :address_id
         end
 
+        get "/orders/current", to: "orders#current", as: "current_order"
+
         scope '/users' do
           resources :credit_cards, only: [:index, :create, :destroy]
         end
+
+        concern :order_routes do
+          resources :line_items
+          resources :payments, only: [:new, :create, :index]
+        end
+
+        resources :orders, concerns: :order_routes
+        resources :checkouts, only: [:update], concerns: :order_routes
 
         post '/users/sign_in', to: 'users#token'
         patch '/password/change', to: 'user_passwords#update'
