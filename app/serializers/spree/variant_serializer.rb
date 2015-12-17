@@ -15,7 +15,12 @@ module Spree
                 :track_inventory,
                 :display_price,
                 :options_text,
-                :can_supply?
+                :can_supply?,
+                :stock_on_hand
+
+    def stock_on_hand
+      object.stock_items.sum(:count_on_hand)
+    end
 
     has_many :images, serializer: ImageSerializer
   end

@@ -10,7 +10,9 @@ module Spree
                 :phone,
                 :state_name,
                 :alternative_phone,
-                :company
+                :company,
+                :state_id,
+                :country_id
 
     # has_one :state, serializer: StateSerializer
     # has_one :country, serializer: CountrySerializer
