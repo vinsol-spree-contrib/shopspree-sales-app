@@ -15,6 +15,7 @@ Rails.application.routes.draw do
         end
 
         get "/orders/current", to: "orders#current", as: "current_order"
+        get "/orders/mine", to: "orders#mine", as: "my_orders"
 
         scope '/users' do
           resources :credit_cards, only: [:index, :create, :destroy]
