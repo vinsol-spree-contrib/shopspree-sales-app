@@ -20,7 +20,7 @@ module Spree
           private
 
             def user_update_params
-              params.require(:user).permit(:full_name, :phone)
+              params.permit(:full_name, :phone)
             end
 
         end
