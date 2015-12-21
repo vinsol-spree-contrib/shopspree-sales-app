@@ -33,16 +33,27 @@ module Spree
                 :confirmation_delivered,
                 :considered_risky,
                 :guest_token,
-                :checkout_steps
-
-    def id
-      object.number
-    end
+                :checkout_steps,
+                :errors
 
     has_many :shipments
     has_many :payments
     has_many :line_items
     has_one :bill_address, root: :addresses
     has_one :ship_address, root: :addresses
+
+    def initialize(object, options={})
+      super
+      options[:is_embedded_in_order] = true
+    end
+
+    def id
+      object.number
+    end
+
+    def errors
+      object.errors.full_messages
+    end
+
   end
 end

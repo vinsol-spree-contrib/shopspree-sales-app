@@ -1,4 +1,6 @@
 Spree::Api::Ams::LineItemsController.class_eval do
+  include ResourceWithErrors
+
   def destroy
     @line_item = find_line_item
     variant = Spree::Variant.unscoped.find(@line_item.variant_id)
