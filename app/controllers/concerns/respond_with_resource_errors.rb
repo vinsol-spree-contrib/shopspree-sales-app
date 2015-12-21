@@ -1,4 +1,4 @@
-module ResourceWithErrors
+module RespondWithResourceErrors
   extend ActiveSupport::Concern
 
   def respond_with(object=nil, options={})

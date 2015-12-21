@@ -1,12 +1,49 @@
 Spree::Api::Ams::LineItemsController.class_eval do
-  include ResourceWithErrors
+  include RespondWithResourceErrors
+
+  # order.contents.add raises an exception instead of validation errors
+  rescue_from ActiveRecord::RecordInvalid do |exception|
+    self.render_order_with_errors(exception.message.sub("Validation failed: ", ""))
+  end
+
+
+  def create
+    variant = Spree::Variant.find(params[:line_item][:variant_id])
+    @line_item = order.contents.add(
+            variant,
+            params[:line_item][:quantity] || 1,
+            line_item_params[:options] || {}
+    )
+
+    if @line_item.errors.empty?
+      respond_with(@line_item.order, status: 201, default_template: :show)
+    else
+      render_order_with_errors
+    end
+  end
+
+  def update
+    @line_item = find_line_item
+    if @order.contents.update_cart(line_items_attributes)
+      @line_item.reload
+      respond_with(@line_item.order, default_template: :show)
+    else
+      render_order_with_errors
+    end
+  end
 
   def destroy
     @line_item = find_line_item
     variant = Spree::Variant.unscoped.find(@line_item.variant_id)
     @order.contents.remove(variant, @line_item.quantity)
-    # Status code changed to 200 OK,
-    # status code of 204 implies no content.
-    render json: { success: true }, status: 200
+    respond_with(@order)
   end
+
+
+  # Order automatically gets the error for nested line items
+  def render_order_with_errors(*error_messages)
+    @order.errors[:base].push(*error_messages) unless error_messages.empty?
+    invalid_resource!(@order)
+  end
+
 end

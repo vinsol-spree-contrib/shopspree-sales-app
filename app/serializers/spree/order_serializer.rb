@@ -42,11 +42,6 @@ module Spree
     has_one :bill_address, root: :addresses
     has_one :ship_address, root: :addresses
 
-    def initialize(object, options={})
-      super
-      options[:is_embedded_in_order] = true
-    end
-
     def id
       object.number
     end
