@@ -5,17 +5,20 @@ module Spree
         include Serializable
         include Requestable
 
-        before_action :load_user, only: :create
+        before_action :load_user_by_email, only: :create
+        before_action :load_ams_user, only: :update
         skip_before_action :authenticate_user, only: :create
 
+        # PATCH api/ams/password/change
         def update
-          if @current_api_user.update_with_password(password_params)
+          if @user.update_with_password(password_params)
             render json: @current_api_user, serializer: Spree::UserSerializer
           else
-            invalid_resource!(@current_api_user)
+            invalid_resource!(@user)
           end
         end
 
+        # POST api/ams/password/reset
         def create
           if @user.send_reset_password_instructions
             render json: { message: 'Successfully send reset password instructions ' }
@@ -26,7 +29,7 @@ module Spree
 
         private
 
-          def load_user
+          def load_user_by_email
             unless @user = Spree.user_class.find_by(email: params[:email])
               render json: { message: 'No user found' }, status: 404
             end
