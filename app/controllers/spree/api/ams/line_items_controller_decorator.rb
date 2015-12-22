@@ -6,6 +6,8 @@ Spree::Api::Ams::LineItemsController.class_eval do
     self.render_order_with_errors(exception.message.sub("Validation failed: ", ""))
   end
 
+  before_action -> { order.restart_checkout_flow }
+
 
   def create
     variant = Spree::Variant.find(params[:line_item][:variant_id])
