@@ -7,7 +7,7 @@ module Spree
 
         def show
           app_configuration = {}
-          app_configuration[:countries] = Spree::Country.where(iso: 'US')
+          app_configuration[:country_details] = Spree::Country.find(Spree::Config[:default_country_id])
           render json: app_configuration, serializer: AppConfigurationSerializer
         end
       end

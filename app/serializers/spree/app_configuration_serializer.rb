@@ -4,8 +4,7 @@ module Spree
     attributes :country_details, :checksum
 
     def country_details
-      # currently only us is supported
-      CountryDetailsSerializer.new(object[:countries][0])
+      Spree::CountryDetailsSerializer.new(object[:country_details])
     end
 
     def checksum
