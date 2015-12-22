@@ -1,7 +1,7 @@
 Spree::Api::Ams::CheckoutsController.class_eval do
+  include RespondWithResourceErrors
 
   # See Issue: https://github.com/vinsol/spree-next/issues/3
-
   before_action -> { old_load_order(true) }
 
   alias_method :old_load_order, :load_order
