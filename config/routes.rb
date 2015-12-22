@@ -5,6 +5,7 @@ Rails.application.routes.draw do
   Spree::Core::Engine.routes.draw do
     namespace :api do
       namespace :ams do
+        resource :config, controller: :app_configuration, only: :show
         resource :home, controller: :home, only: :show
         resources :user_passwords, only: [:update, :create]
         resources :states, only: :index
