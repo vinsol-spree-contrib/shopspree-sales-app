@@ -173,6 +173,7 @@ ActiveRecord::Schema.define(version: 20151218104909) do
   end
 
   add_index "spree_devices", ["device_token"], name: "index_spree_devices_on_device_token", using: :btree
+  add_index "spree_devices", ["user_id"], name: "index_spree_devices_on_user_id", using: :btree
 
   create_table "spree_feedback_reviews", force: :cascade do |t|
     t.integer  "user_id",    limit: 4
