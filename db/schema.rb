@@ -172,6 +172,21 @@ ActiveRecord::Schema.define(version: 20151218104909) do
     t.datetime "updated_at",               null: false
   end
 
+  add_index "spree_devices", ["device_token"], name: "index_spree_devices_on_device_token", using: :btree
+
+  create_table "spree_feedback_reviews", force: :cascade do |t|
+    t.integer  "user_id",    limit: 4
+    t.integer  "review_id",  limit: 4,                    null: false
+    t.integer  "rating",     limit: 4,     default: 0
+    t.text     "comment",    limit: 65535
+    t.datetime "created_at",                              null: false
+    t.datetime "updated_at",                              null: false
+    t.string   "locale",     limit: 255,   default: "en"
+  end
+
+  add_index "spree_feedback_reviews", ["review_id"], name: "index_spree_feedback_reviews_on_review_id", using: :btree
+  add_index "spree_feedback_reviews", ["user_id"], name: "index_spree_feedback_reviews_on_user_id", using: :btree
+
   create_table "spree_filters", force: :cascade do |t|
     t.string   "name",         limit: 255
     t.string   "display_name", limit: 255
@@ -439,7 +454,7 @@ ActiveRecord::Schema.define(version: 20151218104909) do
   add_index "spree_product_property_types", ["name"], name: "index_spree_product_property_types_on_name", unique: true, using: :btree
 
   create_table "spree_products", force: :cascade do |t|
-    t.string   "name",                 limit: 255,   default: "",   null: false
+    t.string   "name",                 limit: 255,                           default: "",   null: false
     t.text     "description",          limit: 65535
     t.datetime "available_on"
     t.datetime "deleted_at"
@@ -448,10 +463,12 @@ ActiveRecord::Schema.define(version: 20151218104909) do
     t.string   "meta_keywords",        limit: 255
     t.integer  "tax_category_id",      limit: 4
     t.integer  "shipping_category_id", limit: 4
-    t.datetime "created_at",                                        null: false
-    t.datetime "updated_at",                                        null: false
-    t.boolean  "promotionable",                      default: true
+    t.datetime "created_at",                                                                null: false
+    t.datetime "updated_at",                                                                null: false
+    t.boolean  "promotionable",                                              default: true
     t.string   "meta_title",           limit: 255
+    t.decimal  "avg_rating",                         precision: 7, scale: 5, default: 0.0,  null: false
+    t.integer  "reviews_count",        limit: 4,                             default: 0,    null: false
   end
 
   add_index "spree_products", ["available_on"], name: "index_spree_products_on_available_on", using: :btree
@@ -667,6 +684,24 @@ ActiveRecord::Schema.define(version: 20151218104909) do
 
   add_index "spree_return_items", ["customer_return_id"], name: "index_return_items_on_customer_return_id", using: :btree
   add_index "spree_return_items", ["exchange_inventory_unit_id"], name: "index_spree_return_items_on_exchange_inventory_unit_id", using: :btree
+
+  create_table "spree_reviews", force: :cascade do |t|
+    t.integer  "product_id",      limit: 4
+    t.string   "name",            limit: 255
+    t.string   "location",        limit: 255
+    t.integer  "rating",          limit: 4
+    t.text     "title",           limit: 65535
+    t.text     "review",          limit: 65535
+    t.boolean  "approved",                      default: false
+    t.datetime "created_at",                                    null: false
+    t.datetime "updated_at",                                    null: false
+    t.integer  "user_id",         limit: 4
+    t.string   "ip_address",      limit: 255
+    t.string   "locale",          limit: 255,   default: "en"
+    t.boolean  "show_identifier",               default: true
+  end
+
+  add_index "spree_reviews", ["show_identifier"], name: "index_spree_reviews_on_show_identifier", using: :btree
 
   create_table "spree_roles", force: :cascade do |t|
     t.string "name", limit: 255
