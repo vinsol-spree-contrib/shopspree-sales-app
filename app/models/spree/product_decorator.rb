@@ -1,4 +1,6 @@
 Spree::Product.class_eval do
+  include Elasticsearch::Model::Callbacks
+
   scope :recommended, -> { where(is_recommended: true) }
   scope :hot,         -> { where(is_hot: true) }
   scope :prices_amount_between, -> (min_price, max_price) { joins(:prices).where(spree_prices: { amount: min_price..max_price }) }
@@ -10,4 +12,7 @@ Spree::Product.class_eval do
     [:prices_amount_between]
   end
 
+  def self.search(*args, &block)
+    self.__elasticsearch__.search(*args, &block)
+  end
 end

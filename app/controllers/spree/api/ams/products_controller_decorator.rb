@@ -1,5 +1,6 @@
 Spree::Api::Ams::ProductsController.class_eval do
   def index
+    debugger
     if params[:ids]
       @product_scope = product_scope.where(id: params[:ids].split(",").flatten)
     else
