@@ -1,8 +1,10 @@
 module Spree
   module Api
     module Ams
-      module Product 
+      module Product
         class ReviewsController < Spree::Api::BaseController
+          include Serializable
+          include Requestable
 
           before_action :load_ams_user, only: [:create, :destroy, :index]
           before_action :load_product, only: [:create, :index]
