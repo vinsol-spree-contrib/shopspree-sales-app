@@ -38,7 +38,11 @@ Spree::Api::Ams::LineItemsController.class_eval do
     @line_item = find_line_item
     variant = Spree::Variant.unscoped.find(@line_item.variant_id)
     @order.contents.remove(variant, @line_item.quantity)
-    respond_with(@order)
+    if @order.destroyed?
+      render json: nil, status: 204
+    else
+      respond_with(@order)
+    end
   end
 
 
