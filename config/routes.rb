@@ -33,6 +33,14 @@ Rails.application.routes.draw do
         post '/users/sign_in', to: 'users#token'
         patch '/password/change', to: 'user_passwords#update'
         post '/password/reset', to: 'user_passwords#create'
+
+        # device urls
+        scope '/devices' do
+          post   'register',   to: 'devices#register'
+          patch  'unlink',     to: 'devices#unlink'
+          delete 'deregister', to: 'devices#deregister'
+        end
+
       end
     end
 
