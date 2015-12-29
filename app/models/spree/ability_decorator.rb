@@ -7,6 +7,7 @@ module Spree
       end
     end
   end
-  Spree::Ability.register_ability(AbilityDecorator)
 end 
 
+Spree::Ability.register_ability(Spree::AbilityDecorator)
+Spree::Ability.register_ability(Spree::CreditCardAbility)
