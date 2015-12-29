@@ -1,5 +1,5 @@
 class Spree::DeviceAbility
-  include CanCanAbility
+  include CanCan::Ability
 
   def initialize(user)
     can :unlink, Spree::Device do |device|
@@ -11,6 +11,3 @@ class Spree::DeviceAbility
     end
   end
 end
-
-
-Spree::Ability.register_ability(Spree::DeviceAbility)
