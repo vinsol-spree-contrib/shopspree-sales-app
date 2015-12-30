@@ -32,7 +32,7 @@ Spree::Product.class_eval do
   # Example : { 1=>0, 2=>1, 3=>2, 4=>5, 5=>0 }
   def ratings_distribution
     valid_ratings = (1..5).to_a
-    distribution = reviews.approved.group(:rating).count
+    distribution = reviews.approved.group(:rating).reorder(:rating).count
     # Add the missing ones with count 0
     valid_ratings.each { |rating| distribution[rating] = 0 unless distribution.has_key?(rating) }
     distribution
