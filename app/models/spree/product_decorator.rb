@@ -21,4 +21,21 @@ Spree::Product.class_eval do
     available_options_hash
   end
 
+  def reviews_with_content_count
+    reviews.approved
+      .where.not(review: nil)
+      .where.not(review: '')
+      .count
+  end
+
+  # Return a hash of ratings with how many users gave that rating.
+  # Example : { 1=>0, 2=>1, 3=>2, 4=>5, 5=>0 }
+  def ratings_distribution
+    valid_ratings = (1..5).to_a
+    distribution = reviews.approved.group(:rating).count
+    # Add the missing ones with count 0
+    valid_ratings.each { |rating| distribution[rating] = 0 unless distribution.has_key?(rating) }
+    distribution
+  end
+
 end
