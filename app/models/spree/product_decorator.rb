@@ -18,7 +18,7 @@ Spree::Product.class_eval do
         available_options_hash[option_name] << option_value
       end
     end
-    available_options_hash
+    available_options_hash.collect { |type, values| { type: type, values: values } }
   end
 
   def reviews_with_content_count
