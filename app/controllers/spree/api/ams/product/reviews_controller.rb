@@ -6,7 +6,7 @@ module Spree
           include Serializable
           include Requestable
 
-          before_action :load_ams_user, only: [:create, :destroy, :index]
+          before_action :load_ams_user, only: [:create, :destroy]
           before_action :load_product, only: [:create, :index]
           before_action :load_review, only: :destroy
 
