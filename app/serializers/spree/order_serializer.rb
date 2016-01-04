@@ -42,6 +42,10 @@ module Spree
     has_one :bill_address, root: :addresses
     has_one :ship_address, root: :addresses
 
+    def payments
+      object.payments.reorder('created_at DESC')
+    end
+
     def id
       object.number
     end
