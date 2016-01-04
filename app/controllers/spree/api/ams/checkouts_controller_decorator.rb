@@ -9,6 +9,11 @@ Spree::Api::Ams::CheckoutsController.class_eval do
   def load_order(arg)
   end
 
+  def back
+    @order.move_back_in_checkout_process
+    respond_with(@order)
+  end
+
   private
 
   def raise_insufficient_quantity
