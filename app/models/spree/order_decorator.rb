@@ -1,4 +1,7 @@
 Spree::Order.class_eval do
+
+  remove_checkout_step :delivery
+
   def restart_checkout_flow
     self.update_columns(state: 'cart', updated_at: Time.current)
   end
