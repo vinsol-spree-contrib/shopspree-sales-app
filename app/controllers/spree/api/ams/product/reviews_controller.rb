@@ -14,7 +14,7 @@ module Spree
             @reviews = @product.reviews.approved.page(params[:page] || 1).per(params[:per_page] || 20)
             render json: @reviews,
               each_serializer: Spree::ReviewSerializer,
-              meta: [:avg_rating, :reviews_count, :reviews_with_content_count, :ratings_distribution].collect { |method| [method, @product.public_send(method)] }.to_h
+              meta: [:avg_rating, :reviews_count, :reviews_with_content_count, :ratings_distribution].inject({}) { |meta_hash, method| meta_hash[method] = @product.send(method); meta_hash }
           end
 
           def create
