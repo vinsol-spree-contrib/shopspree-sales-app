@@ -31,7 +31,13 @@ Rails.application.routes.draw do
         end
 
         resources :orders, concerns: :order_routes
-        resources :checkouts, only: [:update], concerns: :order_routes
+
+        resources :checkouts, only: [:update], concerns: :order_routes do
+          member do
+            put :back
+          end
+        end
+
 
         post '/users/sign_in', to: 'users#token'
         patch '/password/change', to: 'user_passwords#update'
