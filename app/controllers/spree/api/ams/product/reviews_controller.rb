@@ -12,7 +12,9 @@ module Spree
 
           def index
             @reviews = @product.reviews.approved.page(params[:page] || 1).per(params[:per_page] || 20)
-            render json: @reviews, each_serializer: Spree::ReviewSerializer, meta: { avg_rating: @product.avg_rating, reviews_count: @product.reviews_count }
+            render json: @reviews,
+              each_serializer: Spree::ReviewSerializer,
+              meta: [:avg_rating, :reviews_count, :reviews_with_content_count, :ratings_distribution].collect { |method| [method, @product.public_send(method)] }.to_h
           end
 
           def create
