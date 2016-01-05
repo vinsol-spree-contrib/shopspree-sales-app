@@ -17,10 +17,15 @@ module Spree
                 :options_text,
                 :can_supply?,
                 :stock_on_hand,
-                :options
+                :options,
+                :backorderable
 
     def stock_on_hand
       object.stock_items.sum(:count_on_hand)
+    end
+
+    def backorderable
+      object.stock_items.where(backorderable: true).any?
     end
 
     def options
