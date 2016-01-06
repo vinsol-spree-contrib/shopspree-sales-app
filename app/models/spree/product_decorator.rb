@@ -1,5 +1,4 @@
 Spree::Product.class_eval do
-  include Elasticsearch::Model::Callbacks
 
   scope :recommended, -> { where(is_recommended: true) }
   scope :hot,         -> { where(is_hot: true) }
@@ -12,7 +11,5 @@ Spree::Product.class_eval do
     [:prices_amount_between]
   end
 
-  def self.search(*args, &block)
-    self.__elasticsearch__.search(*args, &block)
-  end
+  update_index('spree#product') { self }
 end

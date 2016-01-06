@@ -9,6 +9,10 @@ Rails.application.routes.draw do
         resource :home, controller: :home, only: :show
         resources :user_passwords, only: [:update, :create]
         resources :states, only: :index
+        resources :search, only: :index
+
+        get '/search/suggestions', to: 'searches#suggestions'
+
         namespace :user do
           resources :profiles, only: :update, param: :token
           resources :confirmations, only: :create
