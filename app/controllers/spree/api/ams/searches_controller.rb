@@ -4,7 +4,7 @@ class Spree::Api::Ams::SearchesController < Spree::Api::BaseController
 
   def suggestions
     if params[:q]
-      search_results = SpreeIndex.query({ match: { autocomplete: 'tsh' }}).to_a
+      search_results = SpreeIndex.query({ match: { autocomplete: params[:q] }}).to_a
     else
       search_results = []
     end

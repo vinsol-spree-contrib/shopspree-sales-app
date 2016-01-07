@@ -13,6 +13,10 @@ Rails.application.routes.draw do
 
         get '/search/suggestions', to: 'searches#suggestions'
 
+        namespace :product do
+          resources :reviews, only: [:index, :create, :destroy], param: :review_id
+        end
+
         namespace :user do
           resources :profiles, only: :update, param: :token
           resources :confirmations, only: :create
@@ -32,11 +36,25 @@ Rails.application.routes.draw do
         end
 
         resources :orders, concerns: :order_routes
-        resources :checkouts, only: [:update], concerns: :order_routes
+
+        resources :checkouts, only: [:update], concerns: :order_routes do
+          member do
+            put :back
+          end
+        end
+
 
         post '/users/sign_in', to: 'users#token'
         patch '/password/change', to: 'user_passwords#update'
         post '/password/reset', to: 'user_passwords#create'
+
+        # device urls
+        scope '/devices' do
+          post   'register',   to: 'devices#register'
+          patch  'unlink',     to: 'devices#unlink'
+          delete 'deregister', to: 'devices#deregister'
+        end
+
       end
     end
 
