@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151218104909) do
+ActiveRecord::Schema.define(version: 20160119125923) do
 
   create_table "friendly_id_slugs", force: :cascade do |t|
     t.string   "slug",           limit: 255, null: false
@@ -951,7 +951,7 @@ ActiveRecord::Schema.define(version: 20151218104909) do
   create_table "spree_taxons", force: :cascade do |t|
     t.integer  "parent_id",         limit: 4
     t.integer  "position",          limit: 4,     default: 0
-    t.string   "name",              limit: 255,               null: false
+    t.string   "name",              limit: 255,                   null: false
     t.string   "permalink",         limit: 255
     t.integer  "taxonomy_id",       limit: 4
     t.integer  "lft",               limit: 4
@@ -961,12 +961,13 @@ ActiveRecord::Schema.define(version: 20151218104909) do
     t.integer  "icon_file_size",    limit: 4
     t.datetime "icon_updated_at"
     t.text     "description",       limit: 65535
-    t.datetime "created_at",                                  null: false
-    t.datetime "updated_at",                                  null: false
+    t.datetime "created_at",                                      null: false
+    t.datetime "updated_at",                                      null: false
     t.string   "meta_title",        limit: 255
     t.string   "meta_description",  limit: 255
     t.string   "meta_keywords",     limit: 255
     t.integer  "depth",             limit: 4
+    t.boolean  "suggestable",                     default: false
   end
 
   add_index "spree_taxons", ["parent_id"], name: "index_taxons_on_parent_id", using: :btree

@@ -30,6 +30,11 @@ Spree::Product.class_eval do
       .count
   end
 
+  def spree_api_url
+    # currently not using slugs
+    Spree::Core::Engine.routes.url_helpers.api_ams_product_path id: id
+  end
+
   # Return a hash of ratings with how many users gave that rating.
   # Example : { 1=>0, 2=>1, 3=>2, 4=>5, 5=>0 }
   def ratings_distribution

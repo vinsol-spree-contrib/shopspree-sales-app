@@ -35,14 +35,20 @@ class SpreeIndex < Chewy::Index
     field :autocomplete, analyzer: 'autocomplete_analyzer', value: -> (product) { product.name }
     field :description, analyzer: 'snowball'
     field :available_on, type: 'date', format: 'dateOptionalTime'
+    field :product_url,  index: 'not_analyzed', value: -> { spree_api_url }
     field :price, type: 'double'
     field :sku, index: 'not_analyzed'
-    field :taxon_ids, value: -> (product) { product.taxons.map(&:id) }, index: 'not_analyzed'
-    field :properties, value: -> (product) { product.product_properties.map{|pp| "#{pp.property.name}||#{pp.value}"} }, index: 'not_analyzed'
+    field :taxon_ids,  value: -> { taxons.map(&:id) }, index: 'not_analyzed'
+    field :properties, value: -> { product_properties.map{ |pp| "#{pp.property.name}||#{pp.value}" } }, index: 'not_analyzed'
   end
   define_type Spree::Taxon do
     field :name, analyzer: 'nGram_analyzer', boost: 100
-    field :autocomplete, analyzer: 'autocomplete_analyzer', value: -> (product) { product.name }
+    field :autocomplete, analyzer: 'autocomplete_analyzer', value: -> { name }
+    field :suggestables, type: 'nested', value: -> { associated_suggestables_with_product_filter_urls } do
+      field :name
+      field :product_filter_url
+    end
     field :description, analyzer: 'snowball'
+    field :product_filter_url, value: -> { spree_api_product_filter_url }
   end
 end

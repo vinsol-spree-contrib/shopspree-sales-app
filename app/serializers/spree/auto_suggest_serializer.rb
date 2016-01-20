@@ -1,9 +1,14 @@
 class Spree::AutoSuggestSerializer < ActiveModel::Serializer
 
-  attribute :suggestions
+  attributes :suggestions
+
+  SUGGESTION_SERIALIZER = {
+   "product" => Spree::ProductSuggestionSerializer,
+   "taxon"   => Spree::TaxonSuggestionSerializer
+  }
 
   def suggestions
-    object.map(&:_data).collect { |data| { type: data["_type"], suggestion: data["_source"]["name"] } }
+    object.map(&:_data).collect { |data| SUGGESTION_SERIALIZER[data["_type"]].new(data["_source"]) }
   end
 
 end
