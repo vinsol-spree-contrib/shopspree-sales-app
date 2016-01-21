@@ -39,7 +39,13 @@ class SpreeIndex < Chewy::Index
     field :price, type: 'double'
     field :sku, index: 'not_analyzed'
     field :taxon_ids,  value: -> { taxons.map(&:id) }, index: 'not_analyzed'
-    field :properties, value: -> { product_properties.map{ |pp| "#{pp.property.name}||#{pp.value}" } }, index: 'not_analyzed'
+    field :product_properties, type: 'nested', value: -> { product_properties } do
+      field :name,  index: 'not_analyzed', value: -> { property.name }
+      field :value, index: 'not_analyzed'
+    end
+    agg  :price_stats do
+      { stats: { field: "price" } }
+    end
   end
   define_type Spree::Taxon do
     field :name, analyzer: 'nGram_analyzer', boost: 100
