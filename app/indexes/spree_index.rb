@@ -38,13 +38,16 @@ class SpreeIndex < Chewy::Index
     field :product_url,  index: 'not_analyzed', value: -> { spree_api_url }
     field :price, type: 'double'
     field :sku, index: 'not_analyzed'
-    field :taxon_ids,  value: -> { taxons.map(&:id) }, index: 'not_analyzed'
+    field :taxons,  value: -> { taxons.map(&:name) }, index: 'not_analyzed'
     field :product_properties, type: 'nested', value: -> { product_properties } do
       field :name,  index: 'not_analyzed', value: -> { property.name }
       field :value, index: 'not_analyzed'
     end
-    agg  :price_stats do
+    agg :price_stats do
       { stats: { field: "price" } }
+    end
+    agg :taxon_count do
+      { terms: { field: 'taxons', size: 10000 } }
     end
   end
   define_type Spree::Taxon do
