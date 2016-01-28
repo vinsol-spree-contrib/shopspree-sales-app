@@ -33,6 +33,22 @@ module ProductSearch
     def search
       SpreeIndex::Product.query({ multi_match: { query: @search_options[:q], fields: PRODUCT_SEARCH_FIELDS } })
     end
+
+    def taxon_filters
+
+    end
+
+    def price_filter
+
+    end
+
+    def options_filter
+
+    end
+
+    def properties_filter
+
+    end
   end
 
 end

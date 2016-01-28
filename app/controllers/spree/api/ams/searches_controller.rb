@@ -14,7 +14,6 @@ module Spree
         end
 
         def index
-          debugger
           render json: product_search_results
         end
 
