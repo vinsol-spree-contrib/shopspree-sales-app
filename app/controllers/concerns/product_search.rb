@@ -16,12 +16,17 @@ module ProductSearch
      q: params[:q],
      taxons: params[:taxons],
      options: params[:options],
-     properties: params[:properties]
+     properties: params[:properties],
+     min_price: params[:min_price],
+     max_price: params[:max_price]
     }
   end
 
   class ProductSearchQuery
+    # Boost name
     PRODUCT_SEARCH_FIELDS = ["name^5", "description"]
+    FILTER_METHODS = [:taxon_filter, :price_filter, :options_filter, :properties_filter]
+
     def initialize(search_options)
       @search_options = search_options
     end
@@ -31,24 +36,52 @@ module ProductSearch
     end
 
     def search
-      SpreeIndex::Product.query({ multi_match: { query: @search_options[:q], fields: PRODUCT_SEARCH_FIELDS } })
+      query = SpreeIndex::Product.query({ multi_match: { query: @search_options[:q], fields: PRODUCT_SEARCH_FIELDS } })
+      FILTER_METHODS.each do |filter|
+        query = query.filter(send(filter)) if send("#{ filter }_applicable?")
+      end
+      query
     end
 
-    def taxon_filters
-
+    def aggregates
+      # Strategy : Hide one use other filters. and calculate the aggregate.
     end
 
-    def price_filter
+    private
+      def taxon_filter_applicable?
+        @search_options[:taxons].present?
+      end
 
-    end
+      def options_filter_applicable?
+        @search_options[:options].present?
+      end
 
-    def options_filter
+      def price_filter_applicable?
+        @search_options[:min].present? && @search_options[:max].present?
+      end
 
-    end
+      def properties_filter_applicable?
+        @search_options[:properties].present?
+      end
 
-    def properties_filter
+      def taxon_filter
+        { terms: { taxons: @search_options[:taxons] } }
+      end
 
-    end
+      def price_filter
+        { range: { price: { gte: @search_options[:min], lte: @search_options[:max] } } }
+      end
+
+      def options_filter
+        @search_options[:options].collect do |option_name, option_value|
+          { terms: { "options.type" => option_name, "options.value" => option_value}}
+        end
+      end
+
+      def properties_filter
+        @search_options[:properties].collect do
+          { terms: { "product_properties.name" => prop_name, "product_properties.value" => prop_value}}
+        end
+      end
   end
-
 end
