@@ -6,9 +6,12 @@ module Spree
         include Requestable
 
         def show
-          app_configuration = {}
-          app_configuration[:country_details] = Spree::Country.find(Spree::Config[:default_country_id])
-          render json: app_configuration, serializer: AppConfigurationSerializer
+          app_configuration = Spree::SalesAppConfiguration.get_latest_config
+          render json: app_configuration, serializer: Spree::SalesAppConfigurationSerializer
+        end
+
+        def country_details
+          render json: Spree::Country.find(Spree::Config[:default_country_id]), serializer: Spree::CountryDetailsSerializer
         end
       end
     end

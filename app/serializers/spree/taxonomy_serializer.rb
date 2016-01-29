@@ -3,7 +3,9 @@ module Spree
     attributes :id,
                :name,
                :permalink,
-               :pretty_name
+               :pretty_name,
+               :checksum
+
 
     def permalink
       object.root.permalink
@@ -14,5 +16,11 @@ module Spree
     end
 
     has_one :root
+
+    def checksum
+      unless options[:include_checksum] == false
+        Spree::SalesAppConfiguration.get_latest_config.taxonomies_checksum
+      end
+    end
   end
 end

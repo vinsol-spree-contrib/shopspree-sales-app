@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160119125923) do
+ActiveRecord::Schema.define(version: 20160129074954) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -718,6 +718,14 @@ ActiveRecord::Schema.define(version: 20160119125923) do
 
   add_index "spree_roles_users", ["role_id"], name: "index_spree_roles_users_on_role_id", using: :btree
   add_index "spree_roles_users", ["user_id"], name: "index_spree_roles_users_on_user_id", using: :btree
+
+  create_table "spree_sales_app_configurations", force: :cascade do |t|
+    t.string   "states_checksum"
+    t.string   "home_checksum"
+    t.string   "taxonomies_checksum"
+    t.datetime "created_at",          null: false
+    t.datetime "updated_at",          null: false
+  end
 
   create_table "spree_shipments", force: :cascade do |t|
     t.string   "tracking"
