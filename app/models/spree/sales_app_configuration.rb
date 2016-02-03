@@ -25,16 +25,15 @@ class Spree::SalesAppConfiguration < ActiveRecord::Base
   end
 
   def self.generate_taxonomies_checksum
-    Digest::MD5.hexdigest(ActiveModel::ArraySerializer.new(
-                                                           Spree::Taxonomy.order(:name).includes(:root => :children),
-                                                           each_serializer: Spree::TaxonomySerializer, include_checksum: false ).to_json)
+    Digest::MD5.hexdigest(ActiveModel::ArraySerializer.new(Spree::Taxonomy.order(:name).includes(:root => :children),
+                                                           each_serializer: Spree::TaxonomySerializer).to_json)
   end
 
   def self.generate_home_checksum
-    Digest::MD5.hexdigest(Spree::HomeSerializer.new(Spree::HomeDecorator.new, include_checksum: false).to_json)
+    Digest::MD5.hexdigest(Spree::HomeSerializer.new(Spree::HomeDecorator.new, exclude_checksum: true).to_json)
   end
 
   def self.generate_states_checksum
-    Digest::MD5.hexdigest(Spree::CountryDetailsSerializer.new(Spree::Country.find(Spree::Config[:default_country_id]), include_checksum: false).to_json)
+    Digest::MD5.hexdigest(Spree::CountryDetailsSerializer.new(Spree::Country.find(Spree::Config[:default_country_id]), exclude_checksum: true).to_json)
   end
 end

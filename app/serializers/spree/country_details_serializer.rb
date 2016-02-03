@@ -5,7 +5,7 @@ module Spree
     has_many :states, serializer: Spree::StateSerializer
 
     def checksum
-      unless options[:include_checksum] == false
+      unless options[:exclude_checksum]
         Spree::SalesAppConfiguration.get_latest_config.states_checksum
       end
     end

@@ -5,7 +5,7 @@ module Spree
     has_many :banner_types
 
     def checksum
-      unless options[:include_checksum] == false
+      unless options[:exclude_checksum]
         Spree::SalesAppConfiguration.get_latest_config.home_checksum
       end
     end
