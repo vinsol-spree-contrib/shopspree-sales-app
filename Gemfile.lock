@@ -477,7 +477,7 @@ DEPENDENCIES
   capistrano (~> 3.2.1)
   capistrano-bundler (~> 1.1.4)
   capistrano-rails (~> 1.1.3)
-  chewy
+  chewy (~> 0.8.3)
   coffee-rails (~> 4.1.0)
   factory_girl_rails (~> 4.4.1)
   jquery-rails (~> 4.0.3)
@@ -506,4 +506,4 @@ DEPENDENCIES
   web-console (~> 2.0)
 
 BUNDLED WITH
-   1.10.6
+   1.11.2
