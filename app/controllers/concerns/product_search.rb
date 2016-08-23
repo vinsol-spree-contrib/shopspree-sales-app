@@ -11,6 +11,11 @@ module ProductSearch
     query.results
   end
 
+  def aggregations
+    query = ProductSearchQuery.new(search_options)
+    query.aggregates
+  end
+
   def search_options
     {
      q: params[:q],
@@ -32,22 +37,27 @@ module ProductSearch
     end
 
     def results
-      search.load.to_a
-    end
-
-    def search
-      query = SpreeIndex::Product.query({ multi_match: { query: @search_options[:q], fields: PRODUCT_SEARCH_FIELDS } })
-      FILTER_METHODS.each do |filter|
-        query = query.filter(send(filter)) if send("#{ filter }_applicable?")
-      end
-      query
+      search_query.load.to_a
     end
 
     def aggregates
-      # Strategy : Hide one use other filters. and calculate the aggregate.
+      search_query
+        .aggs(:price_ranges)
+        .aggs(:taxon_count)
+        .aggs(:product_properties_agg)
+        .aggs(:options_agg)
+        .aggs
     end
 
     private
+      def search_query
+        query = SpreeIndex::Product.query({ multi_match: { query: @search_options[:q], fields: PRODUCT_SEARCH_FIELDS } })
+        FILTER_METHODS.each do |filter|
+          query = query.filter(send(filter)) if send("#{ filter }_applicable?")
+        end
+        query
+      end
+
       def taxon_filter_applicable?
         @search_options[:taxons].present?
       end

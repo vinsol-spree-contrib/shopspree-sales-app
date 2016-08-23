@@ -41,12 +41,11 @@ class SpreeIndex < Chewy::Index
     field :taxons,  value: -> { taxons.map(&:id) }, index: 'not_analyzed'
 
     field :product_properties, type: 'nested', value: -> { product_properties } do
-      field :name,  index: 'not_analyzed', value: -> { property.name }
-      field :value, index: 'not_analyzed'
+      field :name,     index: 'not_analyzed', value: -> { property.name }
+      field :value,    index: 'not_analyzed'
     end
 
-    # All available options with type and value
-    field :options, type: 'nested', value: -> { available_options_hash } do
+    field :options, type: 'nested', include_in_parent: true, value: -> { available_options_hash } do
       field :type,   index: 'not_analyzed'
       field :values, index: 'not_analyzed'
     end
@@ -54,11 +53,39 @@ class SpreeIndex < Chewy::Index
     agg :price_ranges do
       # interval determines the step size
       # Use extended range if needed to increase the interval size
-      { histogram: { field: "price", interval: 100 } }
+      { histogram: { field: "prices", interval: 100 } }
     end
 
     agg :taxon_count do
       { terms: { field: 'taxons', size: 10000 } }
+    end
+
+    agg :product_properties_agg do
+      {
+       nested: { path: "product_properties" },
+       aggs:
+       {
+        available_properties:
+        {
+         terms: {  field: 'product_properties.name' } ,
+         aggs:  {  available_values: { terms: { field: 'product_properties.value'} } }
+        }
+       }
+      }
+    end
+
+    agg :options_agg do
+      {
+       nested: { path: "options" },
+       aggs:
+       {
+        available_options:
+        {
+         terms: {  field: 'options.type' } ,
+         aggs:  {  available_values: { terms: { field: 'options.values'} } }
+        }
+       }
+      }
     end
   end
   define_type Spree::Taxon do
