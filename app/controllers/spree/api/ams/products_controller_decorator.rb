@@ -19,8 +19,6 @@ Spree::Api::Ams::ProductsController.class_eval do
       @product_scope = Kaminari.paginate_array(product_search_results).page(params[:page]).per(params[:per_page])
     end
     render json: { products: ActiveModel::ArraySerializer.new(@product_scope, each_serializer: Spree::ProductSerializer), filters: aggregations }
-
-    # render json: Spree::ProductListDecorator.new(@products, @product_scope), serializer: Spree::ProductListSerializer
   end
 
   private
