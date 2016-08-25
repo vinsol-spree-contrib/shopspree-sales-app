@@ -14,7 +14,7 @@ module Spree
         end
 
         def index
-          render json: ActiveModel::ArraySerializer.new(product_search_results, each_serializer: Spree::ProductSerializer, meta: aggregations)
+          render json: { searches: ActiveModel::ArraySerializer.new(product_search_results, each_serializer: Spree::ProductSerializer), filters: aggregations }
         end
 
         private

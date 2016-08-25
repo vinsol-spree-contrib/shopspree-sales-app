@@ -11,7 +11,7 @@ Spree::Taxon.class_eval do
   end
 
   def spree_api_product_filter_url(*additional_taxons)
-    params = { q: { taxons_name_in: [self.name] + additional_taxons.collect(&:name) }}
+    params = { taxon_names: ([self.name] + additional_taxons.collect(&:name)).join(',') }
     Spree::Core::Engine.routes.url_helpers.api_ams_products_path params: params
   end
 

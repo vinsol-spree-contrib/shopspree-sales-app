@@ -38,12 +38,16 @@ class SpreeIndex < Chewy::Index
     field :product_url,  index: 'not_analyzed', value: -> { spree_api_url }
     field :prices, type: 'double', value: -> { variants_including_master.collect(&:price) }
     field :sku, index: 'not_analyzed'
-    field :taxons,  value: -> { taxons.map(&:id) }, index: 'not_analyzed'
+    field :taxons, value: -> { taxons.map(&:id) }, index: 'not_analyzed'
+    field :taxon_names, value: -> { taxons.flat_map { |taxon| [taxon.name] + taxon.associated_suggestables.to_a.map(&:name) } }, index: 'not_analyzed'
 
     field :product_properties, type: 'nested', value: -> { product_properties } do
       field :name,     index: 'not_analyzed', value: -> { property.name }
       field :value,    index: 'not_analyzed'
     end
+
+    field :properties, type: 'string', value: -> { product_properties.map { |pp| "#{ pp.property.name }||#{ pp.value }" } }, index: 'not_analyzed'
+    field :options_values, type: 'string', value: -> { available_options_hash.flat_map {|option_hash| option_hash[:values].to_a.flat_map { |value| option_hash[:type] + '||' + value } } }, index: 'not_analyzed'
 
     field :options, type: 'nested', include_in_parent: true, value: -> { available_options_hash } do
       field :type,   index: 'not_analyzed'
@@ -53,7 +57,7 @@ class SpreeIndex < Chewy::Index
     agg :price_ranges do
       # interval determines the step size
       # Use extended range if needed to increase the interval size
-      { histogram: { field: "prices", interval: 100 } }
+      { stats: { field: "prices" } }
     end
 
     agg :taxon_count do
@@ -88,6 +92,7 @@ class SpreeIndex < Chewy::Index
       }
     end
   end
+
   define_type Spree::Taxon do
     field :name, analyzer: 'nGram_analyzer', boost: 100
     field :autocomplete, analyzer: 'autocomplete_analyzer', value: -> { name }
