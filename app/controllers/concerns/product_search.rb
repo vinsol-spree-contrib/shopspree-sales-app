@@ -20,11 +20,12 @@ module ProductSearch
     {
      q: params[:q],
      taxons: params[:taxons],
-     taxon_names: params[:taxon_names].split(','),
+     taxon_names: params[:taxon_names],
      options: params[:options],
      properties: params[:properties],
      min_price: params[:min_price],
-     max_price: params[:max_price]
+     max_price: params[:max_price],
+     sorting: params[:sorting]
     }
   end
 
@@ -42,7 +43,7 @@ module ProductSearch
     end
 
     def results
-      search_query.load.to_a
+      search_query.order(sorting).load.to_a
     end
 
     def aggregates_not_based_on_any_query
@@ -138,12 +139,31 @@ module ProductSearch
         if @search_options[:q].present?
           query = SpreeIndex::Product.query({ multi_match: { query: @search_options[:q], fields: PRODUCT_SEARCH_FIELDS } })
         else
-          query = SpreeIndex::Product.filter{match_all}
+          query = SpreeIndex::Product.query({match_all: {}})
         end
         FILTER_METHODS.each do |filter|
           query = query.filter(send(filter)) if send("#{ filter }_applicable?")
         end
         query
+      end
+
+      def sorting
+        case @search_options[:sorting]
+        when 'name_asc'
+          [{ 'name.untouched' => :asc }, { price: :asc }, { available_on: :desc }]
+        when 'name_desc'
+          [{ 'name.untouched' => :desc }, { price: :asc }, { available_on: :desc }]
+        when 'price_asc'
+          [{ price: :asc }, { 'name.untouched' => :asc }, { available_on: :desc }]
+        when 'price_desc'
+          [{ price: :desc }, { 'name.untouched' => :asc }, { available_on: :desc }]
+        when 'available_on_desc'
+          [{ available_on: :desc }, { 'name.untouched' => :asc }, { price: :asc }]
+        when 'available_on_asc'
+          [{ available_on: :asc }, { 'name.untouched' => :asc }, { price: :asc }]
+        else
+          [{ 'name.untouched' => :asc }, { price: :asc }, { available_on: :desc }]
+        end
       end
 
       def taxon_filter_applicable?
@@ -170,7 +190,7 @@ module ProductSearch
         # { terms: { taxon_names: @search_options[:taxon_names] } }
         and_filter = []
         unless @search_options[:taxon_names].nil? || @search_options[:taxon_names].empty?
-          taxons = @search_options[:taxon_names].map do |taxon_name|
+          taxons = @search_options[:taxon_names].split(',').map do |taxon_name|
             and_filter << { term: { taxon_names: taxon_name } }
           end
         end
