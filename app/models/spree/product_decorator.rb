@@ -11,6 +11,8 @@ Spree::Product.class_eval do
     [:prices_amount_between]
   end
 
+  update_index('spree#product') { self }
+
   def available_options_hash
     available_options_hash = Hash.new { |h, k| h[k] = Set.new }
     self.variants_and_option_values.each do |variant|
@@ -26,6 +28,11 @@ Spree::Product.class_eval do
       .where.not(review: nil)
       .where.not(review: '')
       .count
+  end
+
+  def spree_api_url
+    # currently not using slugs
+    Spree::Core::Engine.routes.url_helpers.api_ams_product_path id: id
   end
 
   # Return a hash of ratings with how many users gave that rating.

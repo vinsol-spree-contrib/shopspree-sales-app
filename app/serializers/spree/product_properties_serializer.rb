@@ -3,7 +3,7 @@ module Spree
     attributes :id, :product_id, :value, :property_name, :presentation, :type_name
 
     def type_name
-      object.type.name
+      object.type.try(:name)
     end
 
     def presentation

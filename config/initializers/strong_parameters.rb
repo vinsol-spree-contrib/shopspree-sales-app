@@ -7,3 +7,4 @@ Spree::Core::ControllerHelpers::StrongParameters.class_eval do
     ]
   end
 end
+Spree::PermittedAttributes.taxon_attributes << :suggestable
