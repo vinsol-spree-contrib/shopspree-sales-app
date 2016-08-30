@@ -20,11 +20,12 @@ module ProductSearch
     {
      q: params[:q],
      taxons: params[:taxons],
-     taxon_names: params[:taxon_names].split(','),
+     taxon_names: params[:taxon_names],
      options: params[:options],
      properties: params[:properties],
      min_price: params[:min_price],
-     max_price: params[:max_price]
+     max_price: params[:max_price],
+     sorting: params[:sorting]
     }
   end
 
@@ -36,13 +37,22 @@ module ProductSearch
       product_properties_agg: { available_properties: :available_values },
       options_agg: { available_options: :available_values },
     }.with_indifferent_access
+    SORTING_OPTIONS = {
+      name_asc: [{ 'name.untouched' => :asc }, { price: :asc }, { available_on: :desc }],
+      name_desc: [{ 'name.untouched' => :desc }, { price: :asc }, { available_on: :desc }],
+      price_asc: [{ price: :asc }, { 'name.untouched' => :asc }, { available_on: :desc }],
+      price_desc: [{ price: :desc }, { 'name.untouched' => :asc }, { available_on: :desc }],
+      available_on_desc: [{ available_on: :desc }, { 'name.untouched' => :asc }, { price: :asc }],
+      available_on_asc: [{ available_on: :asc }, { 'name.untouched' => :asc }, { price: :asc }],
+      default: [{ 'name.untouched' => :asc }, { price: :asc }, { available_on: :desc }]
+    }.with_indifferent_access
 
     def initialize(search_options)
       @search_options = search_options
     end
 
     def results
-      search_query.load.to_a
+      search_query.order(SORTING_OPTIONS[@search_options[:sorting] || :default]).load.to_a
     end
 
     def aggregates_not_based_on_any_query
@@ -138,7 +148,7 @@ module ProductSearch
         if @search_options[:q].present?
           query = SpreeIndex::Product.query({ multi_match: { query: @search_options[:q], fields: PRODUCT_SEARCH_FIELDS } })
         else
-          query = SpreeIndex::Product.filter{match_all}
+          query = SpreeIndex::Product.query({match_all: {}})
         end
         FILTER_METHODS.each do |filter|
           query = query.filter(send(filter)) if send("#{ filter }_applicable?")
@@ -159,7 +169,7 @@ module ProductSearch
       end
 
       def price_filter_applicable?
-        @search_options[:min].present? && @search_options[:max].present?
+        @search_options[:min_price].present? || @search_options[:max_price].present?
       end
 
       def properties_filter_applicable?
@@ -167,10 +177,12 @@ module ProductSearch
       end
 
       def taxon_names_filter
+        # Exact Match condition
         # { terms: { taxon_names: @search_options[:taxon_names] } }
+
         and_filter = []
         unless @search_options[:taxon_names].nil? || @search_options[:taxon_names].empty?
-          taxons = @search_options[:taxon_names].map do |taxon_name|
+          taxons = @search_options[:taxon_names].split(',').map do |taxon_name|
             and_filter << { term: { taxon_names: taxon_name } }
           end
         end
@@ -178,11 +190,20 @@ module ProductSearch
       end
 
       def taxon_filter
-        { terms: { taxons: @search_options[:taxons] } }
+        # Exact Match condition
+        #{ terms: { taxons: @search_options[:taxons] } }
+
+        and_filter = []
+        unless @search_options[:taxons].nil? || @search_options[:taxons].empty?
+          taxons = @search_options[:taxons].map do |taxon_id|
+            and_filter << { term: { taxons: taxon_id } }
+          end
+        end
+        and_filter
       end
 
       def price_filter
-        { range: { price: { gte: @search_options[:min], lte: @search_options[:max] } } }
+        { range: { price: { gte: @search_options[:min_price], lte: @search_options[:max_price] } } }
       end
 
       def options_filter

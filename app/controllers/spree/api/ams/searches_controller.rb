@@ -14,7 +14,8 @@ module Spree
         end
 
         def index
-          render json: { searches: ActiveModel::ArraySerializer.new(product_search_results, each_serializer: Spree::ProductSerializer), filters: aggregations }
+          @products = Kaminari.paginate_array(product_search_results).page(params[:page]).per(params[:per_page])
+          render json: { searches: ActiveModel::ArraySerializer.new(@products, each_serializer: Spree::ProductSerializer), filters: aggregations }
         end
 
         private
