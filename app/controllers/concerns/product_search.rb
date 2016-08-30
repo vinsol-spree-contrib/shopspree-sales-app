@@ -179,7 +179,7 @@ module ProductSearch
       end
 
       def price_filter_applicable?
-        @search_options[:min].present? && @search_options[:max].present?
+        @search_options[:min_price].present? || @search_options[:max_price].present?
       end
 
       def properties_filter_applicable?
@@ -187,7 +187,9 @@ module ProductSearch
       end
 
       def taxon_names_filter
+        # Exact Match condition
         # { terms: { taxon_names: @search_options[:taxon_names] } }
+
         and_filter = []
         unless @search_options[:taxon_names].nil? || @search_options[:taxon_names].empty?
           taxons = @search_options[:taxon_names].split(',').map do |taxon_name|
@@ -198,11 +200,20 @@ module ProductSearch
       end
 
       def taxon_filter
-        { terms: { taxons: @search_options[:taxons] } }
+        # Exact Match condition
+        #{ terms: { taxons: @search_options[:taxons] } }
+
+        and_filter = []
+        unless @search_options[:taxons].nil? || @search_options[:taxons].empty?
+          taxons = @search_options[:taxons].map do |taxon_id|
+            and_filter << { term: { taxons: taxon_id } }
+          end
+        end
+        and_filter
       end
 
       def price_filter
-        { range: { price: { gte: @search_options[:min], lte: @search_options[:max] } } }
+        { range: { price: { gte: @search_options[:min_price], lte: @search_options[:max_price] } } }
       end
 
       def options_filter
