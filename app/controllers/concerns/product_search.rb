@@ -37,13 +37,22 @@ module ProductSearch
       product_properties_agg: { available_properties: :available_values },
       options_agg: { available_options: :available_values },
     }.with_indifferent_access
+    SORTING_OPTIONS = {
+      name_asc: [{ 'name.untouched' => :asc }, { price: :asc }, { available_on: :desc }],
+      name_desc: [{ 'name.untouched' => :desc }, { price: :asc }, { available_on: :desc }],
+      price_asc: [{ price: :asc }, { 'name.untouched' => :asc }, { available_on: :desc }],
+      price_desc: [{ price: :desc }, { 'name.untouched' => :asc }, { available_on: :desc }],
+      available_on_desc: [{ available_on: :desc }, { 'name.untouched' => :asc }, { price: :asc }],
+      available_on_asc: [{ available_on: :asc }, { 'name.untouched' => :asc }, { price: :asc }],
+      default: [{ 'name.untouched' => :asc }, { price: :asc }, { available_on: :desc }]
+    }.with_indifferent_access
 
     def initialize(search_options)
       @search_options = search_options
     end
 
     def results
-      search_query.order(sorting).load.to_a
+      search_query.order(SORTING_OPTIONS[@search_options[:sorting] || :default]).load.to_a
     end
 
     def aggregates_not_based_on_any_query
@@ -145,25 +154,6 @@ module ProductSearch
           query = query.filter(send(filter)) if send("#{ filter }_applicable?")
         end
         query
-      end
-
-      def sorting
-        case @search_options[:sorting]
-        when 'name_asc'
-          [{ 'name.untouched' => :asc }, { price: :asc }, { available_on: :desc }]
-        when 'name_desc'
-          [{ 'name.untouched' => :desc }, { price: :asc }, { available_on: :desc }]
-        when 'price_asc'
-          [{ price: :asc }, { 'name.untouched' => :asc }, { available_on: :desc }]
-        when 'price_desc'
-          [{ price: :desc }, { 'name.untouched' => :asc }, { available_on: :desc }]
-        when 'available_on_desc'
-          [{ available_on: :desc }, { 'name.untouched' => :asc }, { price: :asc }]
-        when 'available_on_asc'
-          [{ available_on: :asc }, { 'name.untouched' => :asc }, { price: :asc }]
-        else
-          [{ 'name.untouched' => :asc }, { price: :asc }, { available_on: :desc }]
-        end
       end
 
       def taxon_filter_applicable?
