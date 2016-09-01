@@ -19,6 +19,15 @@ GIT
       spree_core (~> 3.0.0.rc)
 
 GIT
+  remote: git://github.com/spree-contrib/spree_email_to_friend.git
+  revision: bada2e955ed63704867a186d3dd0e469ff8b8004
+  branch: 3-0-stable
+  specs:
+    spree_email_to_friend (1.3.0)
+      recaptcha (>= 0.3.1)
+      spree_core (~> 3.0.0.rc2)
+
+GIT
   remote: git://github.com/spree-contrib/spree_mail_settings.git
   revision: 99af7e4a137ac76fe4e93b1c8e5a38d81583904c
   branch: 3-0-stable
@@ -32,6 +41,14 @@ GIT
   branch: 3-0-stable
   specs:
     spree_reviews (3.0.0.beta)
+      spree_core (~> 3.0.0)
+
+GIT
+  remote: git://github.com/spree-contrib/spree_wishlist.git
+  revision: 07520b0a69a4f27e829810ca76cfd2a801ef5571
+  branch: 3-0-stable
+  specs:
+    spree_wishlist (2.2.0)
       spree_core (~> 3.0.0)
 
 GIT
@@ -365,6 +382,8 @@ GEM
       activesupport (>= 3.0)
       i18n
       polyamorous (~> 1.1)
+    recaptcha (3.3.0)
+      json
     ref (2.0.0)
     responders (2.1.0)
       railties (>= 4.2.0, < 5)
@@ -498,9 +517,11 @@ DEPENDENCIES
   spree_address_book!
   spree_ams!
   spree_auth_devise!
+  spree_email_to_friend!
   spree_gateway!
   spree_mail_settings!
   spree_reviews!
+  spree_wishlist!
   therubyracer (~> 0.12.1)
   uglifier (~> 2.7)
   web-console (~> 2.0)

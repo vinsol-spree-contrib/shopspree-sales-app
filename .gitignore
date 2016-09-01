@@ -78,3 +78,4 @@ build/
 /public/*.json
 /db/sphinx/*
 /db/schema.rb
+/public/spree/*

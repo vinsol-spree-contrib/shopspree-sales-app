@@ -44,7 +44,6 @@ Rails.application.routes.draw do
           end
         end
 
-
         post '/users/sign_in', to: 'users#token'
         patch '/password/change', to: 'user_passwords#update'
         post '/password/reset', to: 'user_passwords#create'
@@ -56,6 +55,12 @@ Rails.application.routes.draw do
           delete 'deregister', to: 'devices#deregister'
         end
 
+        resources :wishlists do
+          collections do
+            get :default
+          end
+        end
+        resources :wishlist_products, only: [:create, :update, :destroy]
       end
     end
 
