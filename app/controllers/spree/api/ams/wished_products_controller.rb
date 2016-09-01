@@ -3,6 +3,9 @@ module Spree
     module Ams
       class WishedProductsController < Spree::StoreController
 
+        include Serializable
+        include Requestable
+
         before_action :load_wished_product, only: [:update, :destroy]
         before_action :load_default_wishlist, only: :create
 
