@@ -13,7 +13,7 @@ class Spree::Device < ActiveRecord::Base
   end
 
   def service_type=(value)
-    self.service_type = SERVICE_TYPES[value.downcase.to_sym]
+    self.service_type = SERVICE_TYPES[value.to_sym]
   end
 
   def service_type_title
