@@ -14,6 +14,7 @@ gem 'spree_ams',                              github: 'hhff/spree_ams',         
 gem 'spree_reviews',                          github: 'spree-contrib/spree_reviews',        branch: '3-0-stable'
 gem 'spree_address_book',                     github: 'romul/spree_address_book',           branch: '3-0-stable'
 gem 'aws-sdk',                                '< 2.0'
+gem 'rpush',                                  '~> 2.7.0'
 
 group :assets do
   gem 'therubyracer',                         '~> 0.12.1', platforms: :ruby
