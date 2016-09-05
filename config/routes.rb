@@ -60,7 +60,7 @@ Rails.application.routes.draw do
             get :default
           end
         end
-        resources :wishlist_products, only: [:create, :update, :destroy]
+        resources :wished_products, only: [:create, :update, :destroy]
       end
     end
 

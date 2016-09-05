@@ -6,8 +6,9 @@ module Spree
         include Serializable
         include Requestable
 
-        before_action :load_wished_product, only: [:update, :destroy]
+        before_action :load_ams_user, only: :create
         before_action :load_default_wishlist, only: :create
+        before_action :load_wished_product, only: [:update, :destroy]
 
         def create
           authorize! :create, WishedProduct
@@ -51,13 +52,13 @@ module Spree
           end
 
           def load_wished_product
-            unless @wished_product = Spree::WishedProduct.find(params[:id])
+            unless @wished_product = Spree::WishedProduct.find_by(id: params[:id])
               render json: { errors: 'Wished Product not found' }, status: 404
             end
           end
 
           def load_default_wishlist
-            unless @wishlist = spree_current_user.wishlist
+            unless @wishlist = @user.wishlist
               render json: { errors: 'Wishlist not found' }, status: 404
             end
           end
