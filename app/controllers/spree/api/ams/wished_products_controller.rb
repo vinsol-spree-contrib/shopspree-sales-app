@@ -28,7 +28,7 @@ module Spree
 
         def update
           authorize! :update, @wished_product
-          if @wished_product.update(wished_product_attributes)
+          if @wished_product.update(wished_product_params)
             render_wished_product
           else
             invalid_resource!(@wished_product)

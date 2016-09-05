@@ -56,7 +56,7 @@ Rails.application.routes.draw do
         end
 
         resources :wishlists do
-          collections do
+          collection do
             get :default
           end
         end
