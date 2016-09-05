@@ -20,4 +20,14 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 en:
-  hello: "Hello world"
+  spree:
+    api:
+      ams:
+        wishlists:
+          destroy:
+            success: 'Successfully destroyed wishlist'
+            failure: 'Could not destroy wishlist'
+        wished_products:
+          destroy:
+            success: 'Successfully destroyed wished product'
+            failure: 'Could not destroy wished product'
