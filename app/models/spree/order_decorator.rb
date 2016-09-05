@@ -1,6 +1,8 @@
 Spree::Order.class_eval do
 
   Spree::Order.state_machine.after_transition to: :delivery, do: :transition_to_payment
+  Spree::Order.state_machine.after_transition to: :complete, do: :push_confirmation_notification
+  Spree::Order.state_machine.after_transition to: :canceled, do: :push_cancellation_notification
 
   def restart_checkout_flow
     self.update_columns(state: 'cart', updated_at: Time.current)
@@ -22,4 +24,11 @@ Spree::Order.class_eval do
     self.next!
   end
 
+  def push_confirmation_notification
+    Spree::Notification.new(:confirm_order, number, user).send
+  end
+
+  def push_cancellation_notification
+    Spree::Notification.new(:cancel_order, number, user).send
+  end
 end
