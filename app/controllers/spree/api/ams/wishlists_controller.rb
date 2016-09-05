@@ -6,7 +6,7 @@ module Spree
         include Serializable
         include Requestable
 
-        before_action :load_ams_user, only: [:index, :create, :update, :destroy]
+        before_action :load_ams_user, only: [:index, :create, :update, :destroy, :default]
         before_action :load_wishlist, only: [:update, :destroy, :show]
         before_action :load_default_wishlist, only: :default
 
@@ -63,7 +63,7 @@ module Spree
           end
 
           def load_default_wishlist
-            unless @wishlist = spree_current_user.wishlist
+            unless @wishlist = @user.wishlist
               render json: { errors: 'Wishlist not found' }, status: 404
             end
           end
