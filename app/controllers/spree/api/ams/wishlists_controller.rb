@@ -36,9 +36,9 @@ module Spree
         def destroy
           authorize! :destroy, @wishlist
           if @wishlist.destroy
-            render json: { message: 'Successfully destroyed wishlist ' }
+            render json: { message: t('.success') }
           else
-            render json: { error: 'Unable to destroy wishlist ' }, status: 422
+            render json: { error: t('.failure') }, status: 422
           end
         end
 
@@ -58,13 +58,13 @@ module Spree
 
           def load_wishlist
             unless @wishlist = @user.wishlists.find_by_access_hash!(params[:id])
-              render json: { errors: 'Wishlist not found' }, status: 404
+              render json: { errors: Spree.t(:resource_not_found) }, status: 404
             end
           end
 
           def load_default_wishlist
             unless @wishlist = @user.wishlist
-              render json: { errors: 'Wishlist not found' }, status: 404
+              render json: { errors: Spree.t(:resource_not_found) }, status: 404
             end
           end
 
