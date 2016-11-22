@@ -1,7 +1,7 @@
 ShopSpree Sales
 ===============
 
-ShopSpree Sales is a Spree app built for use with Shop Spree API.
+ShopSpree Sales app is a sample Spree app providing multiple API endpoints for web, iOS and Android solution.
 
 ## Installation
 
