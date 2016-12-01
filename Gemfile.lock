@@ -10,11 +10,11 @@ GIT
       spree_core (~> 3.0.0)
 
 GIT
-  remote: git://github.com/romul/spree_address_book.git
-  revision: 308f5e6739e051de2ae0b8424c3a19a119e8fbff
+  remote: git://github.com/spree-contrib/spree_address_book.git
+  revision: 9bffd2bdce42f474a7b06aa4a9dd8c35bbe39518
   branch: 3-0-stable
   specs:
-    spree_address_book (3.0.0)
+    spree_address_book (3.0.1)
       spree_auth_devise
       spree_core (~> 3.0.0.rc)
 
